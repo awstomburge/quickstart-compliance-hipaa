@@ -1,0 +1,184 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Provisions HIPAA Ready Environment in AWS
+Metadata:
+  Identifier:
+    Value: main
+  Input:
+    Description: Input of all required parameters in nested stacks
+  Output:
+    Description: N/A
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Development VPC Configuration
+      Parameters:
+      - DevVPCCIDRBlock
+      - DevVPCSubnet1
+      - DevVPCSubnet2
+      - DevVPCSubnet3
+      - DevVPCFlowLogLogGroup
+      - DevVPCFlowLogLogGroupRetention
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3BucketRegion
+      - QSS3KeyPrefix
+      - AWSConfigHIPAAPack
+Parameters:
+  DevVPCCIDRBlock:
+    Type: String
+  DevVPCSubnet1:
+    Type: String
+  DevVPCSubnet2:
+    Type: String
+  DevVPCSubnet3:
+    Type: String
+  DevVPCFlowLogLogGroup:
+    Type: String
+  DevVPCFlowLogLogGroupRetention:
+    Type: String
+Resources:
+  DevelopmentVPCFlowLogGroup:
+    Type: 'AWS::Logs::LogGroup'
+    Properties:
+      LogGroupName: !Ref DevVPCFlowLogLogGroup
+      RetentionInDays: !Ref DevVPCFlowLogLogGroupRetention
+  DevelopmentFlowLogsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowFlowLogs
+            Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Description: Development Flow Logs Role
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogGroups'
+                  - 'logs:DescribeLogStreams'
+                Resource: '*'
+          PolicyName: Development-Flow-Logs-Role
+      Tags:
+        - Key: Name
+          Value: Development VPC Flow Logs Role
+        - Key: Purpose
+          Value: Networking
+  DevVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Ref DevVPCCIDRBlock
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: Development VPC
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - DevelopmentVPCFlowLogGroup
+  DevelopmentVPCFlowLogs:
+    Type: 'AWS::EC2::FlowLog'
+    Properties:
+      ResourceId: !Ref DevVPC
+      ResourceType: VPC
+      TrafficType: ALL
+      DeliverLogsPermissionArn: !GetAtt 
+        - DevelopmentFlowLogsRole
+        - Arn
+      LogDestinationType: cloud-watch-logs
+      LogGroupName: !Ref DevVPCFlowLogLogGroup
+      Tags:
+        - Key: Name
+          Value: Development VPC Flow Logs
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - DevelopmentVPCFlowLogGroup
+  DevCoreSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref DevVPCSubnet1
+      VpcId: !Ref DevVPC
+      AvailabilityZone: !Select [ 0, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Development Core Subnet 1
+        - Key: Purpose
+          Value: Networking
+  DevCoreSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref DevVPCSubnet2
+      VpcId: !Ref DevVPC
+      AvailabilityZone: !Select [ 1, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Development Core Subnet 2
+        - Key: Purpose
+          Value: Networking
+  DevCoreSubnet3:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref DevVPCSubnet3
+      VpcId: !Ref DevVPC
+      AvailabilityZone: !Select [ 2, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Development Core Subnet 3
+        - Key: Purpose
+          Value: Networking
+  DevPrivateRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref DevVPC
+      Tags:
+        - Key: Name
+          Value: Development VPC Private Route Table 1
+        - Key: Purpose
+          Value: Networking
+  DevCore1RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref DevPrivateRouteTable1
+      SubnetId: !Ref DevCoreSubnet1
+  DevCore2RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref DevPrivateRouteTable1
+      SubnetId: !Ref DevCoreSubnet2
+  DevCore3RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref DevPrivateRouteTable1
+      SubnetId: !Ref DevCoreSubnet3
+Outputs:
+  DevelopmentVPCSubnet1:
+    Value: !Ref DevCoreSubnet1
+  DevelopmentVPCSubnet2:
+    Value: !Ref DevCoreSubnet2
+  DevelopmentVPCSubnet3:
+    Value: !Ref DevCoreSubnet3
+  DevelopmentVPC:
+    Value: !Ref DevVPC
+  DevelopmentPrivateRouteTable1:
+    Value: !Ref DevPrivateRouteTable1
+  Help:
+    Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
+    Value: ''
+...

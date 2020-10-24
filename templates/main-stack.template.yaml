@@ -1,0 +1,400 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Provisions HIPAA Ready Environment in AWS
+Metadata:
+  Identifier:
+    Value: main
+  Input:
+    Description: Input of all required parameters in nested stacks
+  Output:
+    Description: N/A
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Template Configuration
+      Parameters:
+      - BucketName
+    - Label:
+        default: AWS Config Configuration
+      Parameters:
+      - AWSConfigARN
+    - Label:
+        default: AWS Logging Configuration
+      Parameters:
+      - SNSAlarmEmail
+      - LifecycleExpirationDays
+      - LifecycleTransitionStandardIADays
+      - LifecycleTransitionGlacierDays
+      - CloudTrailLogRetentionDays
+    - Label:
+        default: Development VPC Configuration
+      Parameters:
+      - DevVPCCIDRBlock
+      - DevVPCSubnet1
+      - DevVPCSubnet2
+      - DevVPCSubnet3
+      - DevVPCFlowLogLogGroup
+      - DevVPCFlowLogLogGroupRetention
+    - Label:
+        default: Production VPC Configuration
+      Parameters:
+      - ProdVPCCIDRBlock
+      - ProdVPCSubnet1
+      - ProdVPCSubnet2
+      - ProdVPCSubnet3
+      - ProdVPCFlowLogLogGroup
+      - ProdVPCFlowLogLogGroupRetention
+    - Label:
+        default: Management VPC Configuration
+      Parameters:
+      - MgmtVPCCIDRBlock
+      - MgmtVPCPublicSubnet1
+      - MgmtVPCPublicSubnet2
+      - MgmtVPCPrivateSubnet1
+      - MgmtVPCPrivateSubnet2
+      - MgmtVPCFlowLogLogGroup
+      - MgmtVPCFlowLogLogGroupRetention
+    ParameterLabels:
+      AWSConfigARN:
+        default: AWS Config Service Linked Role ARN
+      SNSAlarmEmail:
+        default: CloudWatch Alarm Notification Email Address
+      LifecycleExpirationDays:
+        default: S3 Lifecycle Expiration Days
+      LifecycleTransitionStandardIADays:
+        default: S3 Lifecycle Transition to Standard IA Days
+      LifecycleTransitionGlacierDays:
+        default: S3 Lifecycle Transition to Glacier Days
+      CloudTrailLogRetentionDays:
+        default: CloudTrail Retention Days
+      DevVPCCIDRBlock:
+        default: Development VPC CIDR Block
+      DevVPCSubnet1:
+        default: Development Subnet 1 CIDR Block
+      DevVPCSubnet2:
+        default: Development Subnet 2 CIDR Block
+      DevVPCSubnet3:
+        default: Development Subnet 2 CIDR Block
+      DevVPCFlowLogLogGroup:
+        default: Development VPC Log Group
+      DevVPCFlowLogLogGroupRetention:
+        default: Development VPC Log Group Retention Days
+      ProdVPCCIDRBlock:
+        default: Production VPC CIDR Block
+      ProdVPCSubnet1:
+        default: Production Subnet 1 CIDR Block
+      ProdVPCSubnet2:
+        default: Production Subnet 2 CIDR Block
+      ProdVPCSubnet3:
+        default: Production Subnet 2 CIDR Block
+      ProdVPCFlowLogLogGroup:
+        default: Production VPC Log Group
+      ProdVPCFlowLogLogGroupRetention:
+        default: Production VPC Log Group Retention Days
+      MgmtVPCCIDRBlock:
+        default: Management VPC CIDR Block
+      MgmtVPCSubnet1:
+        default: Management Subnet 1 CIDR Block
+      MgmtVPCSubnet2:
+        default: Management Subnet 2 CIDR Block
+      MgmtVPCSubnet3:
+        default: Management Subnet 2 CIDR Block
+      MgmtVPCFlowLogLogGroup:
+        default: Management VPC Log Group
+      MgmtVPCFlowLogLogGroupRetention:
+        default: Management VPC Log Group Retention Days
+      QSS3BucketName:
+        default: Quick Start S3 Bucket Name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket region
+      QSS3KeyPrefix:
+        default: Quick Start S3 Key Prefix
+      BucketName:
+        default: Bucket Name for location of templates (ex:my-bucket-/folder) No trailing slash
+Parameters:
+  AWSConfigARN:
+    Type: String
+    Default: arn:aws:iam::501353236270:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+    Description: AWS Config Service Linked Role ARN
+  LifecycleExpirationDays:
+    Type: Number
+    Default: 2555
+    Description: Lifecycle Expiration Days
+  LifecycleTransitionStandardIADays:
+    Type: Number
+    Default: 90
+    Description: Lifecycle Transition Standard-IA Days
+  LifecycleTransitionGlacierDays:
+    Type: Number
+    Default: 180
+    Description: Lifecycle Transition Glacier Days
+  SNSAlarmEmail:
+    Type: String
+    Default: change@me.com
+    Description: SNS Security Alarm Email
+  CloudTrailLogRetentionDays:
+    Type: Number
+    Default: 90
+    Description: CloudTrail Log Group Retention Days
+  DevVPCCIDRBlock:
+    Type: String
+    Default: 172.18.0.0/16
+    Description: Development VPC CIDR Block
+  DevVPCSubnet1:
+    Type: String
+    Default: 172.18.11.0/24
+    Description: Development VPC Subnet 1
+  DevVPCSubnet2:
+    Type: String
+    Default: 172.18.12.0/24
+    Description: Development VPC Subnet 2
+  DevVPCSubnet3:
+    Type: String
+    Default: 172.18.13.0/24
+    Description: Development VPC Subnet 3
+  DevVPCFlowLogLogGroup:
+    Type: String
+    Default: dev-flow-logs-group
+    Description: Development VPC Flow Logs Log Group
+  DevVPCFlowLogLogGroupRetention:
+    Type: Number
+    Default: 90
+    Description: Development VPC Flow Logs Log Group Retention Days
+  ProdVPCCIDRBlock:
+    Type: String
+    Default: 172.17.0.0/16
+    Description: Production VPC CIDR Block
+  ProdVPCSubnet1:
+    Type: String
+    Default: 172.17.11.0/24
+    Description: Production VPC Subnet 1
+  ProdVPCSubnet2:
+    Type: String
+    Default: 172.17.12.0/24
+    Description: Production VPC Subnet 2
+  ProdVPCSubnet3:
+    Type: String
+    Default: 172.17.13.0/24
+    Description: Production VPC Subnet 3
+  ProdVPCFlowLogLogGroup:
+    Type: String
+    Default: prod-flow-logs-group
+    Description: Production VPC Flow Logs Log Group
+  ProdVPCFlowLogLogGroupRetention:
+    Type: Number
+    Default: 90
+    Description: Production VPC Flow Logs Log Group Retention Days
+  MgmtVPCCIDRBlock:
+    Type: String
+    Default: 172.16.0.0/16
+    Description: Management VPC CIDR Block
+  MgmtVPCPublicSubnet1:
+    Type: String
+    Default: 172.16.1.0/24
+    Description: Management VPC Subnet 1
+  MgmtVPCPublicSubnet2:
+    Type: String
+    Default: 172.16.2.0/24
+    Description: Management VPC Subnet 2
+  MgmtVPCPrivateSubnet1:
+    Type: String
+    Default: 172.16.11.0/24
+    Description: Management VPC Subnet 1
+  MgmtVPCPrivateSubnet2:
+    Type: String
+    Default: 172.16.12.0/24
+    Description: Management VPC Subnet 2
+  MgmtVPCFlowLogLogGroup:
+    Type: String
+    Default: mgmt-flow-logs-group
+    Description: Management VPC Flow Logs Log Group
+  MgmtVPCFlowLogLogGroupRetention:
+    Type: Number
+    Default: 90
+    Description: Management VPC Flow Logs Log Group Retention Days
+  BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
+    Description: S3 bucket name where the templates live
+    Type: String
+Mappings:
+  RegionServiceSupport:
+    us-east-1:
+      ConfigRules: 'true'
+      NatGateway: 'true'
+      Glacier: 'true'
+    us-east-2:
+      ConfigRules: 'true'
+      NatGateway: 'true'
+      Glacier: 'true'
+    us-gov-west-1:
+      ConfigRules: 'true'
+      NatGateway: 'true'
+      Glacier: 'true'
+    us-west-1:
+      ConfigRules: 'true'
+      NatGateway: 'true'
+      Glacier: 'true'
+    us-west-2:
+      ConfigRules: 'true'
+      NatGateway: 'true'
+      Glacier: 'true'
+Resources:
+  ConfigStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: 
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/config-stack.template.yaml'
+          - S3Bucket: !Ref BucketName
+      TimeoutInMinutes: 20
+      Parameters:
+        AWSConfigARN: !Ref AWSConfigARN
+        BucketName: !Ref BucketName
+  LogStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: 
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/log-stack.template.yaml'
+          - S3Bucket: !Ref BucketName
+      TimeoutInMinutes: 20
+      Parameters:
+        SNSAlarmEmail: !Ref SNSAlarmEmail
+        LifecycleExpirationDays: !Ref LifecycleExpirationDays
+        LifecycleTransitionStandardIADays: !Ref LifecycleTransitionStandardIADays
+        LifecycleTransitionGlacierDays: !Ref LifecycleTransitionGlacierDays
+        CloudTrailLogRetentionDays: !Ref CloudTrailLogRetentionDays
+  DevStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: 
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/dev-stack.template.yaml'
+          - S3Bucket: !Ref BucketName
+      TimeoutInMinutes: 20
+      Parameters:
+        DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
+        DevVPCSubnet1: !Ref DevVPCSubnet1
+        DevVPCSubnet2: !Ref DevVPCSubnet2
+        DevVPCSubnet3: !Ref DevVPCSubnet3
+        DevVPCFlowLogLogGroup: !Ref DevVPCFlowLogLogGroup
+        DevVPCFlowLogLogGroupRetention: !Ref DevVPCFlowLogLogGroupRetention
+  ProdStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: 
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/prod-stack.template.yaml'
+          - S3Bucket: !Ref BucketName
+      TimeoutInMinutes: 20
+      Parameters:
+        ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
+        ProdVPCSubnet1: !Ref ProdVPCSubnet1
+        ProdVPCSubnet2: !Ref ProdVPCSubnet2
+        ProdVPCSubnet3: !Ref ProdVPCSubnet3
+        ProdVPCFlowLogLogGroup: !Ref ProdVPCFlowLogLogGroup
+        ProdVPCFlowLogLogGroupRetention: !Ref ProdVPCFlowLogLogGroupRetention
+  MgmtStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: 
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/mgmt-stack.template.yaml'
+          - S3Bucket: !Ref BucketName
+      TimeoutInMinutes: 20
+      Parameters:
+        MgmtVPCCIDRBlock: !Ref MgmtVPCCIDRBlock
+        MgmtVPCPublicSubnet1: !Ref MgmtVPCPublicSubnet1
+        MgmtVPCPublicSubnet2: !Ref MgmtVPCPublicSubnet2
+        MgmtVPCPrivateSubnet1: !Ref MgmtVPCPrivateSubnet1
+        MgmtVPCPrivateSubnet2: !Ref MgmtVPCPrivateSubnet2
+        MgmtVPCFlowLogLogGroup: !Ref MgmtVPCFlowLogLogGroup
+        MgmtVPCFlowLogLogGroupRetention: !Ref MgmtVPCFlowLogLogGroupRetention
+  TgwStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: 
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/tgw-stack.template.yaml'
+          - S3Bucket: !Ref BucketName
+      TimeoutInMinutes: 20
+      Parameters:
+        DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
+        ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
+        DevelopmentVPC:
+          Fn::GetAtt: 
+          - DevStack
+          - Outputs.DevelopmentVPC
+        DevelopmentVPCSubnet1:
+          Fn::GetAtt: 
+          - DevStack
+          - Outputs.DevelopmentVPCSubnet1
+        DevelopmentVPCSubnet2:
+          Fn::GetAtt: 
+          - DevStack
+          - Outputs.DevelopmentVPCSubnet2
+        DevelopmentVPCSubnet3:
+          Fn::GetAtt: 
+          - DevStack
+          - Outputs.DevelopmentVPCSubnet3
+        DevelopmentPrivateRouteTable1:
+          Fn::GetAtt: 
+          - DevStack
+          - Outputs.DevelopmentPrivateRouteTable1
+        ProductionVPC:
+          Fn::GetAtt: 
+          - ProdStack
+          - Outputs.ProductionVPC
+        ProductionCoreSubnet1:
+          Fn::GetAtt: 
+          - ProdStack
+          - Outputs.ProductionCoreSubnet1
+        ProductionCoreSubnet2:
+          Fn::GetAtt: 
+          - ProdStack
+          - Outputs.ProductionCoreSubnet2
+        ProductionCoreSubnet3:
+          Fn::GetAtt: 
+          - ProdStack
+          - Outputs.ProductionCoreSubnet3
+        ProductionPrivateRouteTable1:
+          Fn::GetAtt: 
+          - ProdStack
+          - Outputs.ProductionPrivateRouteTable1
+        ManagementVPC:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementVPC
+        ManagementCoreSubnet1:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementCoreSubnet1
+        ManagementCoreSubnet2:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementCoreSubnet2
+        ManagementPrivateRouteTable1:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementPrivateRouteTable1
+        ManagementPrivateRouteTable2:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementPrivateRouteTable2
+        ManagementPublicRouteTable1:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementPublicRouteTable1
+        ManagementPublicRouteTable2:
+          Fn::GetAtt: 
+          - MgmtStack
+          - Outputs.ManagementPublicRouteTable2
+Outputs:
+  TemplateType:
+    Value: HIPAA Compliance
+  TemplateVersion:
+    Value: 1.0
+  Help:
+    Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
+    Value: ''
+...

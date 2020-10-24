@@ -1,0 +1,313 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Provisions HIPAA Ready Environment in AWS
+Metadata:
+  Identifier:
+    Value: main
+  Input:
+    Description: Input of all required parameters in nested stacks
+  Output:
+    Description: N/A
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Management VPC Configuration
+      Parameters:
+      - MgmtVPCCIDRBlock
+      - MgmtVPCPublicSubnet1
+      - MgmtVPCPublicSubnet2
+      - MgmtVPCPrivateSubnet1
+      - MgmtVPCPrivateSubnet2
+      - MgmtVPCFlowLogLogGroup
+      - MgmtVPCFlowLogLogGroupRetention
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3BucketRegion
+      - QSS3KeyPrefix
+      - AWSConfigHIPAAPack
+Parameters:
+  MgmtVPCCIDRBlock:
+    Type: String
+  MgmtVPCPublicSubnet1:
+    Type: String
+  MgmtVPCPublicSubnet2:
+    Type: String
+  MgmtVPCPrivateSubnet1:
+    Type: String
+  MgmtVPCPrivateSubnet2:
+    Type: String
+  MgmtVPCFlowLogLogGroup:
+    Type: String
+  MgmtVPCFlowLogLogGroupRetention:
+    Type: String
+Resources:
+  ManagementVPCFlowLogGroup:
+    Type: 'AWS::Logs::LogGroup'
+    Properties:
+      LogGroupName: !Ref MgmtVPCFlowLogLogGroup
+      RetentionInDays: !Ref MgmtVPCFlowLogLogGroupRetention
+  ManagementFlowLogsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowFlowLogs
+            Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Description: Management Flow Logs Role
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogGroups'
+                  - 'logs:DescribeLogStreams'
+                Resource: '*'
+          PolicyName: Management-Flow-Logs-Role
+  ManagementVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Ref MgmtVPCCIDRBlock
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: Management VPC
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - ManagementVPCFlowLogGroup
+  ManagementVPCFlowLogs:
+    Type: 'AWS::EC2::FlowLog'
+    Properties:
+      ResourceId: !Ref ManagementVPC
+      ResourceType: VPC
+      TrafficType: ALL
+      DeliverLogsPermissionArn: !GetAtt 
+        - ManagementFlowLogsRole
+        - Arn
+      LogDestinationType: cloud-watch-logs
+      LogGroupName: !Ref MgmtVPCFlowLogLogGroup
+      Tags:
+        - Key: Name
+          Value: Management VPC Flow Logs
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - ManagementVPCFlowLogGroup
+  ManagementDMZSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref MgmtVPCPublicSubnet1
+      VpcId: !Ref ManagementVPC
+      AvailabilityZone: !Select [ 0, !GetAZs ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Management DMZ Subnet 1
+        - Key: Purpose
+          Value: Networking
+  ManagementDMZSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref MgmtVPCPublicSubnet2
+      VpcId: !Ref ManagementVPC
+      AvailabilityZone: !Select [ 1, !GetAZs ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Management DMZ Subnet 2
+        - Key: Purpose
+          Value: Networking
+  ManagementCoreSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref MgmtVPCPrivateSubnet1
+      VpcId: !Ref ManagementVPC
+      AvailabilityZone: !Select [ 0, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Management Core Subnet 1
+        - Key: Purpose
+          Value: Networking
+  ManagementCoreSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref MgmtVPCPrivateSubnet2
+      VpcId: !Ref ManagementVPC
+      AvailabilityZone: !Select [ 1, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Management Core Subnet 2
+        - Key: Purpose
+          Value: Networking
+  ManagementPublicRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management VPC Public Route Table 1
+        - Key: Purpose
+          Value: Networking
+  ManagementPrivateRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management VPC Private Route Table 1
+        - Key: Purpose
+          Value: Networking
+  ManagementPublicRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management VPC Public Route Table 2
+        - Key: Purpose
+          Value: Networking
+  ManagementPrivateRouteTable2:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management VPC Private Route Table 2
+        - Key: Purpose
+          Value: Networking
+  ManagementDMZ1RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable1
+      SubnetId: !Ref ManagementDMZSubnet1
+  ManagementDMZ2RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable2
+      SubnetId: !Ref ManagementDMZSubnet2
+  ManagementCore1RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable1
+      SubnetId: !Ref ManagementCoreSubnet1
+  ManagementCore2RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable2
+      SubnetId: !Ref ManagementCoreSubnet2
+  ManagementVPCIGW:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Management VPC IGW
+        - Key: Purpose
+          Value: Networking
+  ManagementVPCIGWAttach:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref ManagementVPC
+      InternetGatewayId: !Ref ManagementVPCIGW
+  ManagementEIPforNATGateway1:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management EIP for NAT Gateway 1
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - ManagementVPCIGW
+  ManagementEIPforNATGateway2:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management EIP for NAT Gateway 2
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - ManagementVPCIGW
+  ManagementNATGateway1:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt 
+        - ManagementEIPforNATGateway1
+        - AllocationId
+      SubnetId: !Ref ManagementDMZSubnet1
+      Tags:
+        - Key: Name
+          Value: Management NAT Gateway 1
+        - Key: Purpose
+          Value: Networking
+  ManagementNATGateway2:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt 
+        - ManagementEIPforNATGateway2
+        - AllocationId
+      SubnetId: !Ref ManagementDMZSubnet2
+      Tags:
+        - Key: Name
+          Value: Management NAT Gateway 2
+        - Key: Purpose
+          Value: Networking
+  ManagementIGWDefaultRoute1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref ManagementVPCIGW
+  ManagementNATDefaultRoute1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref ManagementNATGateway1
+  ManagementIGWDefaultRoute2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref ManagementVPCIGW
+  ManagementNATDefaultRoute2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref ManagementNATGateway2
+Outputs:
+  ManagementCoreSubnet1:
+    Value: !Ref ManagementCoreSubnet1
+  ManagementCoreSubnet2:
+    Value: !Ref ManagementCoreSubnet2
+  ManagementVPC:
+    Value: !Ref ManagementVPC
+  ManagementPrivateRouteTable1:
+    Value: !Ref ManagementPrivateRouteTable1
+  ManagementPrivateRouteTable2:
+    Value: !Ref ManagementPrivateRouteTable2
+  ManagementPublicRouteTable1:
+    Value: !Ref ManagementPublicRouteTable1
+  ManagementPublicRouteTable2:
+    Value: !Ref ManagementPublicRouteTable2
+  Help:
+    Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
+    Value: ''
+...
