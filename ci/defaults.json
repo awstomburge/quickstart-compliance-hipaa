@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "AWSConfigARN",
-        "ParameterValue": "$[taskcat_genpass_26]"
+        "ParameterValue": "change-to-aws-config-role-arn"
     },
     {
         "ParameterKey": "LifecycleExpirationDays",
@@ -100,7 +100,15 @@
         "ParameterValue": 90
     },
     {
-        "ParameterKey": "BucketName",
-        "ParameterValue": "bucket_name"
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "aws-quickstart"
+    },
+    {
+        "ParameterKey": "QSS3BucketRegion",
+        "ParameterValue": "us-east-1"
+    },
+    {
+        "ParameterKey": "QSS3KeyPrefix",
+        "ParameterValue": "quickstart-compliance-hipaa/"
     }
 ]

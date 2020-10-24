@@ -11,7 +11,7 @@ project:
 tests:
   compl-hipaa:
     parameters:
-      AWSConfigARN: arn:aws:iam::501353236270:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+      AWSConfigARN: change-to-aws-config-role-arn
       LifecycleExpirationDays: 2555
       LifecycleTransitionStandardIADays: 90
       LifecycleTransitionGlacierDays: 180
@@ -36,7 +36,9 @@ tests:
       MgmtVPCPrivateSubnet2: 172.16.12.0/24
       MgmtVPCFlowLogLogGroup: mgmt-flow-logs-group
       MgmtVPCFlowLogLogGroupRetention: 90
-      BucketName:
+      QSS3BucketName: aws-quickstart
+      QSS3BucketRegion: us-east-1
+      QSS3KeyPrefix: quickstart-compliance-hipaa/
     regions:
     - us-east-1
     - us-east-2

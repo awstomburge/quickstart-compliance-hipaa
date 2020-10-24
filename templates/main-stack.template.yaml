@@ -11,10 +11,6 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Template Configuration
-      Parameters:
-      - BucketName
-    - Label:
         default: AWS Config Configuration
       Parameters:
       - AWSConfigARN
@@ -109,8 +105,6 @@ Metadata:
         default: Management VPC Log Group
       MgmtVPCFlowLogLogGroupRetention:
         default: Management VPC Log Group Retention Days
-      BucketName:
-        default: Bucket Name for location of templates (ex:my-bucket-/folder) No trailing slash
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
       QSS3BucketRegion:
