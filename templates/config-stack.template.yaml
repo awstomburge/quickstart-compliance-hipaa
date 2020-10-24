@@ -1,0 +1,90 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Provisions HIPAA Ready Environment in AWS
+Metadata:
+  Identifier:
+    Value: main
+  Input:
+    Description: Input of all required parameters in nested stacks
+  Output:
+    Description: N/A
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: AWS Config Configuration
+      Parameters:
+      - AWSConfigARN
+Parameters:
+  AWSConfigARN:
+    Type: String
+  BucketName:
+    Type: String
+Resources:
+  AWSConfigLoggingBucket:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Retain
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Name
+          Value: AWS Config Logging Bucket
+        - Key: Purpose
+          Value: Security
+  AWSConfigBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    DeletionPolicy: Retain
+    Properties:
+      Bucket: !Ref AWSConfigLoggingBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Id: AWSConfigAccessToBucket
+        Statement:
+          - Sid: AWSConfigBucketPermissionsCheck
+            Effect: Allow
+            Principal:
+              Service: config.amazonaws.com
+            Action: 's3:GetBucketAcl'
+            Resource: !GetAtt 
+              - AWSConfigLoggingBucket
+              - Arn
+          - Sid: AWSConfigBucketDelivery
+            Effect: Allow
+            Principal:
+              Service: config.amazonaws.com
+            Action: 's3:PutObject'
+            Resource: !Join 
+              - ''
+              - - !GetAtt 
+                  - AWSConfigLoggingBucket
+                  - Arn
+                - /*
+            Condition:
+              StringEquals:
+                's3:x-amz-acl': bucket-owner-full-control
+  AWSConfigDeliveryChannel:
+    Type: 'AWS::Config::DeliveryChannel'
+    Properties:
+      S3BucketName: !Ref AWSConfigLoggingBucket
+      Name: default
+  AWSConfigConfigurationRecorder:
+    Type: 'AWS::Config::ConfigurationRecorder'
+    Properties:
+      RoleARN: !Ref AWSConfigARN
+      Name: default
+  AWSConfigHIPAAConformancePack:
+    Type: 'AWS::Config::ConformancePack'
+    Properties:
+      ConformancePackName: aws-config-hipaa-conformance-pack
+      TemplateS3Uri: !Join 
+        - ''
+        - - 's3://'
+          - !Ref BucketName
+          - '/Operational-Best-Practices-for-HIPAA-Security.yaml'
+Outputs:
+  Help:
+    Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
+    Value: ''
+...

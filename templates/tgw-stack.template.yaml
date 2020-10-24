@@ -1,0 +1,297 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Provisions HIPAA Ready Environment in AWS
+Metadata:
+  Identifier:
+    Value: main
+  Input:
+    Description: Input of all required parameters in nested stacks
+  Output:
+    Description: N/A
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Development VPC Configuration
+      Parameters:
+      - DevVPCCIDRBlock
+      - DevVPCSubnet1
+      - DevVPCSubnet2
+      - DevVPCSubnet3
+    - Label:
+        default: Production VPC Configuration
+      Parameters:
+      - ProdVPCCIDRBlock
+      - ProdVPCSubnet1
+      - ProdVPCSubnet2
+      - ProdVPCSubnet3
+    - Label:
+        default: Management VPC Configuration
+      Parameters:
+      - MgmtVPCCIDRBlock
+      - MgmtVPCPublicSubnet1
+      - MgmtVPCPublicSubnet2
+      - MgmtVPCPrivateSubnet1
+      - MgmtVPCPrivateSubnet2
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3BucketRegion
+      - QSS3KeyPrefix
+      - AWSConfigHIPAAPack
+Parameters:
+  DevelopmentVPC:
+    Type: String
+  DevelopmentVPCSubnet1:
+    Type: String
+  DevelopmentVPCSubnet2:
+    Type: String
+  DevelopmentVPCSubnet3:
+    Type: String
+  DevelopmentPrivateRouteTable1:
+    Type: String
+  ProductionVPC:
+    Type: String
+  ProductionCoreSubnet1:
+    Type: String
+  ProductionCoreSubnet2:
+    Type: String
+  ProductionCoreSubnet3:
+    Type: String
+  ProductionPrivateRouteTable1:
+    Type: String
+  ManagementVPC:
+    Type: String
+  ManagementCoreSubnet1:
+    Type: String
+  ManagementCoreSubnet2:
+    Type: String
+  ManagementPrivateRouteTable1:
+    Type: String
+  ManagementPrivateRouteTable2:
+    Type: String
+  ManagementPublicRouteTable1:
+    Type: String
+  ManagementPublicRouteTable2:
+    Type: String
+  DevVPCCIDRBlock:
+    Type: String
+  ProdVPCCIDRBlock:
+    Type: String
+Resources:
+  HIPAATransitGateway:
+    Type: 'AWS::EC2::TransitGateway'
+    Properties:
+      AutoAcceptSharedAttachments: enable
+      DefaultRouteTableAssociation: disable
+      DefaultRouteTablePropagation: disable
+      Description: HIPAA Transit Gateway
+      DnsSupport: enable
+      Tags:
+        - Key: Name
+          Value: HIPAA Transit Gateway
+        - Key: Purpose
+          Value: Networking
+      VpnEcmpSupport: enable
+  ManagementVPCtoTransitGateway:
+    Type: 'AWS::EC2::TransitGatewayAttachment'
+    Properties:
+      SubnetIds:
+        - !Ref ManagementCoreSubnet1
+        - !Ref ManagementCoreSubnet2
+      TransitGatewayId: !Ref HIPAATransitGateway
+      VpcId: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: Management Transit Gateway Attachment
+        - Key: Purpose
+          Value: Networking
+  ProductionVPCtoTransitGateway:
+    Type: 'AWS::EC2::TransitGatewayAttachment'
+    Properties:
+      SubnetIds:
+        - !Ref ProductionCoreSubnet1
+        - !Ref ProductionCoreSubnet2
+        - !Ref ProductionCoreSubnet3
+      TransitGatewayId: !Ref HIPAATransitGateway
+      VpcId: !Ref ProductionVPC
+      Tags:
+        - Key: Name
+          Value: Production Transit Gateway Attachment
+        - Key: Purpose
+          Value: Networking
+  DevVPCtoTransitGateway:
+    Type: 'AWS::EC2::TransitGatewayAttachment'
+    Properties:
+      SubnetIds:
+        - !Ref DevelopmentVPCSubnet1
+        - !Ref DevelopmentVPCSubnet2
+        - !Ref DevelopmentVPCSubnet3
+      TransitGatewayId: !Ref HIPAATransitGateway
+      VpcId: !Ref DevelopmentVPC
+      Tags:
+        - Key: Name
+          Value: Development Transit Gateway Attachment
+        - Key: Purpose
+          Value: Networking
+  TransitGatewayExternalRouteTable:
+    Type: 'AWS::EC2::TransitGatewayRouteTable'
+    Properties:
+      TransitGatewayId: !Ref HIPAATransitGateway
+      Tags:
+        - Key: Name
+          Value: External Transit Gateway Route Table
+        - Key: Purpose
+          Value: Networking
+  TransitGatewayInternalRouteTable:
+    Type: 'AWS::EC2::TransitGatewayRouteTable'
+    Properties:
+      TransitGatewayId: !Ref HIPAATransitGateway
+      Tags:
+        - Key: Name
+          Value: Internal Transit Gateway Route Table
+        - Key: Purpose
+          Value: Networking
+  TransitGatewayExternalRouteTableAssociation:
+    Type: 'AWS::EC2::TransitGatewayRouteTableAssociation'
+    Properties:
+      TransitGatewayAttachmentId: !Ref ManagementVPCtoTransitGateway
+      TransitGatewayRouteTableId: !Ref TransitGatewayExternalRouteTable
+  TransitGatewayProductionVPCRouteTableAssociation:
+    Type: 'AWS::EC2::TransitGatewayRouteTableAssociation'
+    Properties:
+      TransitGatewayAttachmentId: !Ref ProductionVPCtoTransitGateway
+      TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
+  TransitGatewayDevelopmentVPCRouteTableAssociation:
+    Type: 'AWS::EC2::TransitGatewayRouteTableAssociation'
+    Properties:
+      TransitGatewayAttachmentId: !Ref DevVPCtoTransitGateway
+      TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
+  TransitGatewayInternalRouteProp1:
+    Type: 'AWS::EC2::TransitGatewayRouteTablePropagation'
+    Properties:
+      TransitGatewayAttachmentId: !Ref ProductionVPCtoTransitGateway
+      TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
+  TransitGatewayInternalRouteProp2:
+    Type: 'AWS::EC2::TransitGatewayRouteTablePropagation'
+    Properties:
+      TransitGatewayAttachmentId: !Ref DevVPCtoTransitGateway
+      TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
+  TransitGatewayExternalRouteProp1:
+    Type: 'AWS::EC2::TransitGatewayRouteTablePropagation'
+    Properties:
+      TransitGatewayAttachmentId: !Ref ManagementVPCtoTransitGateway
+      TransitGatewayRouteTableId: !Ref TransitGatewayExternalRouteTable
+  TransitGatewayInternalRoute1:
+    Type: 'AWS::EC2::TransitGatewayRoute'
+    Properties:
+      TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      TransitGatewayAttachmentId: !Ref ManagementVPCtoTransitGateway
+  TransitGatewayExternalRoute1:
+    Type: 'AWS::EC2::TransitGatewayRoute'
+    Properties:
+      TransitGatewayRouteTableId: !Ref TransitGatewayExternalRouteTable
+      DestinationCidrBlock: !Ref ProdVPCCIDRBlock
+      TransitGatewayAttachmentId: !Ref ProductionVPCtoTransitGateway
+  TransitGatewayExternalRoute2:
+    Type: 'AWS::EC2::TransitGatewayRoute'
+    Properties:
+      TransitGatewayRouteTableId: !Ref TransitGatewayExternalRouteTable
+      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      TransitGatewayAttachmentId: !Ref DevVPCtoTransitGateway
+  ManagementPrivateSubnet1Route1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable1
+      DestinationCidrBlock: !Ref ProdVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPrivateSubnet1Route2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable1
+      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPrivateSubnet2Route1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable2
+      DestinationCidrBlock: !Ref ProdVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPrivateSubnet2Route2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPrivateRouteTable2
+      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPublicSubnet1Route1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable1
+      DestinationCidrBlock: !Ref ProdVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPublicSubnet1Route2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable1
+      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPublicSubnet2Route1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable2
+      DestinationCidrBlock: !Ref ProdVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  ManagementPublicSubnet2Route2:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ManagementPublicRouteTable2
+      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ManagementVPCtoTransitGateway
+  DevelopmentVPCDefaultRoute:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref DevelopmentPrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - DevVPCtoTransitGateway
+      - HIPAATransitGateway
+  ProductionVPCDefaultRoute:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref ProductionPrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      TransitGatewayId: !Ref HIPAATransitGateway
+    DependsOn:
+      - HIPAATransitGateway
+      - ProductionVPCtoTransitGateway
+Outputs:
+  Help:
+    Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
+    Value: ''
+...

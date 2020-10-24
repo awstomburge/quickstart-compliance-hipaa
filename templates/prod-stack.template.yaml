@@ -1,0 +1,184 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Provisions HIPAA Ready Environment in AWS
+Metadata:
+  Identifier:
+    Value: main
+  Input:
+    Description: Input of all required parameters in nested stacks
+  Output:
+    Description: N/A
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Production VPC Configuration
+      Parameters:
+      - ProdVPCCIDRBlock
+      - ProdVPCSubnet1
+      - ProdVPCSubnet2
+      - ProdVPCSubnet3
+      - ProdVPCFlowLogLogGroup
+      - ProdVPCFlowLogLogGroupRetention
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3BucketRegion
+      - QSS3KeyPrefix
+      - AWSConfigHIPAAPack
+Parameters:
+  ProdVPCCIDRBlock:
+    Type: String
+  ProdVPCSubnet1:
+    Type: String
+  ProdVPCSubnet2:
+    Type: String
+  ProdVPCSubnet3:
+    Type: String
+  ProdVPCFlowLogLogGroup:
+    Type: String
+  ProdVPCFlowLogLogGroupRetention:
+    Type: String
+Resources:
+  ProductionVPCFlowLogGroup:
+    Type: 'AWS::Logs::LogGroup'
+    Properties:
+      LogGroupName: !Ref ProdVPCFlowLogLogGroup
+      RetentionInDays: !Ref ProdVPCFlowLogLogGroupRetention
+  ProductionFlowLogsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowFlowLogs
+            Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Description: Production Flow Logs Role
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DescribeLogGroups'
+                  - 'logs:DescribeLogStreams'
+                Resource: '*'
+          PolicyName: Production-Flow-Logs-Role
+      Tags:
+        - Key: Name
+          Value: Production VPC Flow Logs Role
+        - Key: Purpose
+          Value: Networking
+  ProductionVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Ref ProdVPCCIDRBlock
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: Production VPC
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - ProductionVPCFlowLogGroup
+  ProductionVPCFlowLogs:
+    Type: 'AWS::EC2::FlowLog'
+    Properties:
+      ResourceId: !Ref ProductionVPC
+      ResourceType: VPC
+      TrafficType: ALL
+      DeliverLogsPermissionArn: !GetAtt 
+        - ProductionFlowLogsRole
+        - Arn
+      LogDestinationType: cloud-watch-logs
+      LogGroupName: !Ref ProdVPCFlowLogLogGroup
+      Tags:
+        - Key: Name
+          Value: Production VPC Flow Logs
+        - Key: Purpose
+          Value: Networking
+    DependsOn:
+      - ProductionVPCFlowLogGroup
+  ProductionCoreSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref ProdVPCSubnet1
+      VpcId: !Ref ProductionVPC
+      AvailabilityZone: !Select [ 0, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Production Core Subnet 1
+        - Key: Purpose
+          Value: Networking
+  ProductionCoreSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref ProdVPCSubnet2
+      VpcId: !Ref ProductionVPC
+      AvailabilityZone: !Select [ 1, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Production Core Subnet 2
+        - Key: Purpose
+          Value: Networking
+  ProductionCoreSubnet3:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: !Ref ProdVPCSubnet3
+      VpcId: !Ref ProductionVPC
+      AvailabilityZone: !Select [ 2, !GetAZs ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Production Core Subnet 3
+        - Key: Purpose
+          Value: Networking
+  ProductionPrivateRouteTable1:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref ProductionVPC
+      Tags:
+        - Key: Name
+          Value: Production VPC Private Route Table 1
+        - Key: Purpose
+          Value: Networking
+  ProductionCore1RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ProductionPrivateRouteTable1
+      SubnetId: !Ref ProductionCoreSubnet1
+  ProductionCore2RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ProductionPrivateRouteTable1
+      SubnetId: !Ref ProductionCoreSubnet2
+  ProductionCore3RouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref ProductionPrivateRouteTable1
+      SubnetId: !Ref ProductionCoreSubnet3
+Outputs:
+  ProductionCoreSubnet1:
+    Value: !Ref ProductionCoreSubnet1
+  ProductionCoreSubnet2:
+    Value: !Ref ProductionCoreSubnet2
+  ProductionCoreSubnet3:
+    Value: !Ref ProductionCoreSubnet3
+  ProductionVPC:
+    Value: !Ref ProductionVPC
+  ProductionPrivateRouteTable1:
+    Value: !Ref ProductionPrivateRouteTable1
+  Help:
+    Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
+    Value: ''
+...
