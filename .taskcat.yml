@@ -3,11 +3,6 @@ project:
   owner: quickstart-eng@amazon.com
   package_lambda: false
   regions:
-  - ap-northeast-1
-  - ap-south-1
-  - ap-southeast-1
-  - eu-central-1
-  - eu-west-1
   - us-east-1
   - us-east-2
   - us-west-1
@@ -16,22 +11,33 @@ project:
 tests:
   compl-hipaa:
     parameters:
-      QSS3BucketName: $[taskcat_autobucket]
-      QSS3BucketRegion: $[taskcat_current_region]
-      pAvailabilityZoneA: $[taskcat_getsingleaz_1]
-      pAvailabilityZoneB: $[taskcat_getsingleaz_2]
-      pDBPassword: $[taskcat_genpass_26]
-      pEC2KeyPair: $[taskcat_getkeypair]
-      pEC2KeyPairBastion: $[taskcat_getkeypair]
-      pNotifyEmail: distlist@example.org
-      pSupportsConfig: 'false'
-      pVPCTenancy: default
+      AWSConfigARN: arn:aws:iam::501353236270:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+      LifecycleExpirationDays: 2555
+      LifecycleTransitionStandardIADays: 90
+      LifecycleTransitionGlacierDays: 180
+      SNSAlarmEmail: change@me.com
+      CloudTrailLogRetentionDays: 90
+      DevVPCCIDRBlock: 172.18.0.0/16
+      DevVPCSubnet1: 172.18.11.0/24
+      DevVPCSubnet2: 172.18.12.0/24
+      DevVPCSubnet3: 172.18.13.0/24
+      DevVPCFlowLogLogGroup: dev-flow-logs-group
+      DevVPCFlowLogLogGroupRetention: 90
+      ProdVPCCIDRBlock: 172.17.0.0/16
+      ProdVPCSubnet1: 172.17.11.0/24
+      ProdVPCSubnet2: 172.17.12.0/24
+      ProdVPCSubnet3: 172.17.13.0/24
+      ProdVPCFlowLogLogGroup: prod-flow-logs-group
+      ProdVPCFlowLogLogGroupRetention: 90
+      MgmtVPCCIDRBlock: 172.16.0.0/16
+      MgmtVPCPublicSubnet1: 172.16.1.0/24
+      MgmtVPCPublicSubnet2: 172.16.2.0/24
+      MgmtVPCPrivateSubnet1: 172.16.11.0/24
+      MgmtVPCPrivateSubnet2: 172.16.12.0/24
+      MgmtVPCFlowLogLogGroup: mgmt-flow-logs-group
+      MgmtVPCFlowLogLogGroupRetention: 90
+      BucketName:
     regions:
-    - ap-northeast-1
-    - ap-south-1
-    - ap-southeast-1
-    - eu-central-1
-    - eu-west-1
     - us-east-1
     - us-east-2
     - us-west-1

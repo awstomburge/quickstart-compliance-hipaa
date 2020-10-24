@@ -78,11 +78,11 @@ Resources:
     Type: 'AWS::Config::ConformancePack'
     Properties:
       ConformancePackName: aws-config-hipaa-conformance-pack
-      TemplateS3Uri: !Join 
-        - ''
-        - - 's3://'
-          - !Ref BucketName
-          - '/Operational-Best-Practices-for-HIPAA-Security.yaml'
+      TemplateS3Uri:
+        !Sub 
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}Operational-Best-Practices-for-HIPAA-Security.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
 Outputs:
   Help:
     Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
