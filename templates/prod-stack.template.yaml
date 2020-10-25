@@ -19,13 +19,6 @@ Metadata:
       - ProdVPCSubnet3
       - ProdVPCFlowLogLogGroup
       - ProdVPCFlowLogLogGroupRetention
-    - Label:
-        default: AWS Quick Start Configuration
-      Parameters:
-      - QSS3BucketName
-      - QSS3BucketRegion
-      - QSS3KeyPrefix
-      - AWSConfigHIPAAPack
 Parameters:
   ProdVPCCIDRBlock:
     Type: String

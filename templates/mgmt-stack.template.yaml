@@ -20,13 +20,6 @@ Metadata:
       - MgmtVPCPrivateSubnet2
       - MgmtVPCFlowLogLogGroup
       - MgmtVPCFlowLogLogGroupRetention
-    - Label:
-        default: AWS Quick Start Configuration
-      Parameters:
-      - QSS3BucketName
-      - QSS3BucketRegion
-      - QSS3KeyPrefix
-      - AWSConfigHIPAAPack
 Parameters:
   MgmtVPCCIDRBlock:
     Type: String
