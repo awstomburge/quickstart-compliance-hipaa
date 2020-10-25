@@ -263,9 +263,9 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}config-stack.template.yaml'
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/config-stack.template.yaml'
           - QSS3BucketName: !Ref QSS3BucketName
-          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 20
       Parameters:
         AWSConfigARN: !Ref AWSConfigARN
@@ -276,9 +276,9 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}log-stack.template.yaml'
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/log-stack.template.yaml'
           - QSS3BucketName: !Ref QSS3BucketName
-          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 20
       Parameters:
         SNSAlarmEmail: !Ref SNSAlarmEmail
@@ -291,9 +291,9 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}dev-stack.template.yaml'
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/dev-stack.template.yaml'
           - QSS3BucketName: !Ref QSS3BucketName
-          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 20
       Parameters:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
@@ -307,9 +307,9 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}prod-stack.template.yaml'
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/prod-stack.template.yaml'
           - QSS3BucketName: !Ref QSS3BucketName
-          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 20
       Parameters:
         ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
@@ -323,9 +323,9 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}mgmt-stack.template.yaml'
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/mgmt-stack.template.yaml'
           - QSS3BucketName: !Ref QSS3BucketName
-          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 20
       Parameters:
         MgmtVPCCIDRBlock: !Ref MgmtVPCCIDRBlock
@@ -340,9 +340,9 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}tgw-stack.template.yaml'
+          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/tgw-stack.template.yaml'
           - QSS3BucketName: !Ref QSS3BucketName
-          - QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 20
       Parameters:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
