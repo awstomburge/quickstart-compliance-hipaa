@@ -17,7 +17,9 @@ Metadata:
 Parameters:
   AWSConfigARN:
     Type: String
-  BucketName:
+  QSS3BucketName:
+    Type: String
+  QSS3KeyPrefix:
     Type: String
 Resources:
   AWSConfigLoggingBucket:
