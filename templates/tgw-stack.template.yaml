@@ -32,13 +32,6 @@ Metadata:
       - MgmtVPCPublicSubnet2
       - MgmtVPCPrivateSubnet1
       - MgmtVPCPrivateSubnet2
-    - Label:
-        default: AWS Quick Start Configuration
-      Parameters:
-      - QSS3BucketName
-      - QSS3BucketRegion
-      - QSS3KeyPrefix
-      - AWSConfigHIPAAPack
 Parameters:
   DevelopmentVPC:
     Type: String

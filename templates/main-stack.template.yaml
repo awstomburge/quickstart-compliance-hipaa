@@ -212,10 +212,6 @@ Parameters:
     Type: Number
     Default: 90
     Description: Management VPC Flow Logs Log Group Retention Days
-  BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
-    Description: S3 bucket name where the templates live
-    Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
