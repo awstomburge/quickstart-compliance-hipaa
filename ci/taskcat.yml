@@ -10,6 +10,12 @@ global:
   # - us-west-2
   reporting: true
 tests:
-  compl-hipaa:
-    parameter_input: defaults.json
+  # compl-hipaa:
+  #   parameter_input: defaults.json
+  #   template_file: main-stack.template.yaml
+  us-east-1:
+    parameter_input: us-east-1.json
+    template_file: main-stack.template.yaml
+  us-east-2:
+    parameter_input: us-east-2.json
     template_file: main-stack.template.yaml
