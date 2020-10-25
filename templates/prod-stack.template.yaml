@@ -16,7 +16,6 @@ Metadata:
       - ProdVPCCIDRBlock
       - ProdVPCSubnet1
       - ProdVPCSubnet2
-      - ProdVPCSubnet3
       - ProdVPCFlowLogLogGroup
       - ProdVPCFlowLogLogGroupRetention
 Parameters:
@@ -25,8 +24,6 @@ Parameters:
   ProdVPCSubnet1:
     Type: String
   ProdVPCSubnet2:
-    Type: String
-  ProdVPCSubnet3:
     Type: String
   ProdVPCFlowLogLogGroup:
     Type: String
@@ -124,18 +121,6 @@ Resources:
           Value: Production Core Subnet 2
         - Key: Purpose
           Value: Networking
-  ProductionCoreSubnet3:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      CidrBlock: !Ref ProdVPCSubnet3
-      VpcId: !Ref ProductionVPC
-      AvailabilityZone: !Select [ 2, !GetAZs ]
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: Production Core Subnet 3
-        - Key: Purpose
-          Value: Networking
   ProductionPrivateRouteTable1:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -155,18 +140,11 @@ Resources:
     Properties:
       RouteTableId: !Ref ProductionPrivateRouteTable1
       SubnetId: !Ref ProductionCoreSubnet2
-  ProductionCore3RouteAssociation:
-    Type: 'AWS::EC2::SubnetRouteTableAssociation'
-    Properties:
-      RouteTableId: !Ref ProductionPrivateRouteTable1
-      SubnetId: !Ref ProductionCoreSubnet3
 Outputs:
   ProductionCoreSubnet1:
     Value: !Ref ProductionCoreSubnet1
   ProductionCoreSubnet2:
     Value: !Ref ProductionCoreSubnet2
-  ProductionCoreSubnet3:
-    Value: !Ref ProductionCoreSubnet3
   ProductionVPC:
     Value: !Ref ProductionVPC
   ProductionPrivateRouteTable1:
