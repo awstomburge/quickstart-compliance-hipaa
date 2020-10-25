@@ -16,14 +16,12 @@ Metadata:
       - DevVPCCIDRBlock
       - DevVPCSubnet1
       - DevVPCSubnet2
-      - DevVPCSubnet3
     - Label:
         default: Production VPC Configuration
       Parameters:
       - ProdVPCCIDRBlock
       - ProdVPCSubnet1
       - ProdVPCSubnet2
-      - ProdVPCSubnet3
     - Label:
         default: Management VPC Configuration
       Parameters:
@@ -39,8 +37,6 @@ Parameters:
     Type: String
   DevelopmentVPCSubnet2:
     Type: String
-  DevelopmentVPCSubnet3:
-    Type: String
   DevelopmentPrivateRouteTable1:
     Type: String
   ProductionVPC:
@@ -48,8 +44,6 @@ Parameters:
   ProductionCoreSubnet1:
     Type: String
   ProductionCoreSubnet2:
-    Type: String
-  ProductionCoreSubnet3:
     Type: String
   ProductionPrivateRouteTable1:
     Type: String
@@ -105,7 +99,6 @@ Resources:
       SubnetIds:
         - !Ref ProductionCoreSubnet1
         - !Ref ProductionCoreSubnet2
-        - !Ref ProductionCoreSubnet3
       TransitGatewayId: !Ref HIPAATransitGateway
       VpcId: !Ref ProductionVPC
       Tags:
@@ -119,7 +112,6 @@ Resources:
       SubnetIds:
         - !Ref DevelopmentVPCSubnet1
         - !Ref DevelopmentVPCSubnet2
-        - !Ref DevelopmentVPCSubnet3
       TransitGatewayId: !Ref HIPAATransitGateway
       VpcId: !Ref DevelopmentVPC
       Tags:
