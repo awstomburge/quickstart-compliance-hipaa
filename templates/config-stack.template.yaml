@@ -86,7 +86,7 @@ Resources:
           - !Ref QSS3BucketName
           - '/'
           - !Ref QSS3KeyPrefix
-          - 'hipaa/Operational-Best-Practices-for-HIPAA-Security.yaml'
+          - 'templates/hipaa/Operational-Best-Practices-for-HIPAA-Security.yaml'
 Outputs:
   Help:
     Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com
