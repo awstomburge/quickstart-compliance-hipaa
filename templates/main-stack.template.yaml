@@ -272,7 +272,6 @@ Resources:
         AWSConfigARN: !Ref AWSConfigARN
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
-        QSS3Region: !Ref QSS3Region
   LogStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
