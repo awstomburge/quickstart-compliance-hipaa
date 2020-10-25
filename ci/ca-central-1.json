@@ -1,0 +1,114 @@
+[
+    {
+        "ParameterKey": "AWSConfigARN",
+        "ParameterValue": "arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig"
+    },
+    {
+        "ParameterKey": "LifecycleExpirationDays",
+        "ParameterValue": 2555
+    },
+    {
+        "ParameterKey": "LifecycleTransitionStandardIADays",
+        "ParameterValue": 90
+    },
+    {
+        "ParameterKey": "LifecycleTransitionGlacierDays",
+        "ParameterValue": "180"
+    },
+    {
+        "ParameterKey": "SNSAlarmEmail",
+        "ParameterValue": "change@me.com"
+    },
+    {
+        "ParameterKey": "CloudTrailLogRetentionDays",
+        "ParameterValue": 90
+    },
+    {
+        "ParameterKey": "DevVPCCIDRBlock",
+        "ParameterValue": "172.18.0.0/16"
+    },
+    {
+        "ParameterKey": "DevVPCSubnet1",
+        "ParameterValue": "172.18.11.0/24"
+    },
+    {
+        "ParameterKey": "DevVPCSubnet2",
+        "ParameterValue": "172.18.12.0/24"
+    },
+    {
+        "ParameterKey": "DevVPCSubnet3",
+        "ParameterValue": "172.18.13.0/24"
+    },
+    {
+        "ParameterKey": "DevVPCFlowLogLogGroup",
+        "ParameterValue": "dev-flow-logs-group"
+    },
+    {
+        "ParameterKey": "DevVPCFlowLogLogGroupRetention",
+        "ParameterValue": 90
+    },
+    {
+        "ParameterKey": "ProdVPCCIDRBlock",
+        "ParameterValue": "172.17.0.0/16"
+    },
+    {
+        "ParameterKey": "ProdVPCSubnet1",
+        "ParameterValue": "172.17.11.0/24"
+    },
+    {
+        "ParameterKey": "ProdVPCSubnet2",
+        "ParameterValue": "172.17.12.0/24"
+    },
+    {
+        "ParameterKey": "ProdVPCSubnet3",
+        "ParameterValue": "172.17.13.0/24"
+    },
+    {
+        "ParameterKey": "ProdVPCFlowLogLogGroup",
+        "ParameterValue": "prod-flow-logs-group"
+    },
+    {
+        "ParameterKey": "ProdVPCFlowLogLogGroupRetention",
+        "ParameterValue": 90
+    },
+    {
+        "ParameterKey": "MgmtVPCCIDRBlock",
+        "ParameterValue": "172.16.0.0/16"
+    },
+    {
+        "ParameterKey": "MgmtVPCPublicSubnet1",
+        "ParameterValue": "172.16.1.0/24"
+    },
+    {
+        "ParameterKey": "MgmtVPCPublicSubnet2",
+        "ParameterValue": "172.16.2.0/24"
+    },
+    {
+        "ParameterKey": "MgmtVPCPrivateSubnet1",
+        "ParameterValue": "172.16.11.0/24"
+    },
+    {
+        "ParameterKey": "MgmtVPCPrivateSubnet2",
+        "ParameterValue": "172.16.12.0/24"
+    },
+    {
+        "ParameterKey": "MgmtVPCFlowLogLogGroup",
+        "ParameterValue": "mgmt-flow-logs-group"
+    },
+    {
+        "ParameterKey": "MgmtVPCFlowLogLogGroupRetention",
+        "ParameterValue": 90
+    },
+    {
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "$[taskcat_autobucket]"
+    },
+    {
+        "ParameterKey": "QSS3BucketRegion",
+        "ParameterValue": "ca-central-1"
+    },
+    {
+        "ParameterKey": "QSS3KeyPrefix",
+        "ParameterValue": "quickstart-compliance-hipaa/"
+    }
+]

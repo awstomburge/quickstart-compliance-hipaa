@@ -3,7 +3,7 @@
 
 The HIPAA Quick Start deploys a reference architecture that helps organizations with workloads that fall in scope for the Health Insurance Portability and Accountability Act.
 
-The Quick Start will deploy a standard three-tier web architecture using multiple VPCs.
+The Quick Start will deploy multiple VPCs with centralized Internet egress and the AWS Config Conformance Pack for HIPAA.
 
 ![Architecture](https://d0.awsstatic.com/partner-network/QuickStart/datasheets/hipaa-on-aws-architecture.png)
 
