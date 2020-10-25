@@ -17,7 +17,9 @@ Metadata:
 Parameters:
   AWSConfigARN:
     Type: String
-  BucketName:
+  QSS3BucketName:
+    Type: String
+  QSS3KeyPrefix:
     Type: String
 Resources:
   AWSConfigLoggingBucket:
@@ -81,8 +83,10 @@ Resources:
       TemplateS3Uri: !Join 
         - ''
         - - 's3://'
-          - !Ref BucketName
-          - '/Operational-Best-Practices-for-HIPAA-Security.yaml'
+          - !Ref QSS3BucketName
+          - '/'
+          - !Ref QSS3KeyPrefix
+          - 'templates/hipaa/Operational-Best-Practices-for-HIPAA-Security.yaml'
 Outputs:
   Help:
     Description: For assistance or questions regarding this quickstart please email compliance-accelerator@amazon.com

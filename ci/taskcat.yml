@@ -4,18 +4,18 @@ global:
   owner: quickstart-eng@amazon.com
   qsname: quickstart-compliance-hipaa
   regions:
-  - ap-northeast-1
-  - ap-south-1
-  - ap-southeast-1
-  - eu-central-1
-  - eu-west-1
   - us-east-1
   - us-east-2
-  - us-west-1
-  - us-west-2
-  # - sa-east-1
+  # - us-west-1
+  # - us-west-2
   reporting: true
 tests:
-  compl-hipaa:
-    parameter_input: defaults.json
-    template_file: main.template
+  # compl-hipaa:
+  #   parameter_input: defaults.json
+  #   template_file: main-stack.template.yaml
+  us-east-1:
+    parameter_input: us-east-1.json
+    template_file: main-stack.template.yaml
+  us-east-2:
+    parameter_input: us-east-2.json
+    template_file: main-stack.template.yaml

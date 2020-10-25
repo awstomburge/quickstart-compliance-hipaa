@@ -18,13 +18,6 @@ Metadata:
       - LifecycleTransitionStandardIADays
       - LifecycleTransitionGlacierDays
       - CloudTrailLogRetentionDays
-    - Label:
-        default: AWS Quick Start Configuration
-      Parameters:
-      - QSS3BucketName
-      - QSS3BucketRegion
-      - QSS3KeyPrefix
-      - AWSConfigHIPAAPack
 Parameters:
   SNSAlarmEmail:
     Type: String

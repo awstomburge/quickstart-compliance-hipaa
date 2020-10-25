@@ -105,7 +105,7 @@
     },
     {
         "ParameterKey": "QSS3BucketRegion",
-        "ParameterValue": "$[taskcat_current_region]"
+        "ParameterValue": "us-east-1"
     },
     {
         "ParameterKey": "QSS3KeyPrefix",

@@ -11,10 +11,6 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Template Configuration
-      Parameters:
-      - BucketName
-    - Label:
         default: AWS Config Configuration
       Parameters:
       - AWSConfigARN
@@ -54,6 +50,12 @@ Metadata:
       - MgmtVPCPrivateSubnet2
       - MgmtVPCFlowLogLogGroup
       - MgmtVPCFlowLogLogGroupRetention
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3Region
+      - QSS3KeyPrefix
     ParameterLabels:
       AWSConfigARN:
         default: AWS Config Service Linked Role ARN
@@ -105,16 +107,14 @@ Metadata:
         default: Management VPC Log Group Retention Days
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
-      QSS3BucketRegion:
+      QSS3Region:
         default: Quick Start S3 bucket region
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
-      BucketName:
-        default: Bucket Name for location of templates (ex:my-bucket-/folder) No trailing slash
 Parameters:
   AWSConfigARN:
     Type: String
-    Default: arn:aws:iam::501353236270:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+    Default: change-arn-aws-config-role-arn
     Description: AWS Config Service Linked Role ARN
   LifecycleExpirationDays:
     Type: Number
@@ -212,9 +212,28 @@ Parameters:
     Type: Number
     Default: 90
     Description: Management VPC Flow Logs Log Group Retention Days
-  BucketName:
+  QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
-    Description: S3 bucket name where the templates live
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
+      end with a hyphen (-).
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3Region:
+    Default: us-east-1
+    Description: The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-compliance-hipaa/
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
     Type: String
 Mappings:
   RegionServiceSupport:
@@ -244,19 +263,24 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/config-stack.template.yaml'
-          - S3Bucket: !Ref BucketName
+          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/config-stack.template.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         AWSConfigARN: !Ref AWSConfigARN
-        BucketName: !Ref BucketName
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
   LogStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/log-stack.template.yaml'
-          - S3Bucket: !Ref BucketName
+          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/log-stack.template.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         SNSAlarmEmail: !Ref SNSAlarmEmail
@@ -269,8 +293,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/dev-stack.template.yaml'
-          - S3Bucket: !Ref BucketName
+          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/dev-stack.template.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
@@ -284,8 +310,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/prod-stack.template.yaml'
-          - S3Bucket: !Ref BucketName
+          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/prod-stack.template.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
@@ -299,8 +327,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/mgmt-stack.template.yaml'
-          - S3Bucket: !Ref BucketName
+          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/mgmt-stack.template.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         MgmtVPCCIDRBlock: !Ref MgmtVPCCIDRBlock
@@ -315,8 +345,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${AWS::Region}.${AWS::URLSuffix}/${S3Bucket}/tgw-stack.template.yaml'
-          - S3Bucket: !Ref BucketName
+          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/tgw-stack.template.yaml'
+          - QSS3BucketName: !Ref QSS3BucketName
+            QSS3KeyPrefix: !Ref QSS3KeyPrefix
+            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
