@@ -8,8 +8,22 @@ global:
   - us-east-2
   - us-west-1
   - us-west-2
+  - ca-central-1
+  - ap-south-1
+  - ap-northeast-1
+  - ap-northeast-2
+  - ap-northeast-3
+  - ap-southeast-1
+  - ap-southeast-2
+  - eu-central-1
+  - eu-west-1
+  - eu-west-2
+  - eu-west-3
+  - eu-north-1
+  - sa-east-1
   reporting: true
 tests:
+  # US Regions
   us-east-1:
     parameter_input: us-east-1.json
     template_file: main-stack.template.yaml
@@ -21,4 +35,47 @@ tests:
     template_file: main-stack.template.yaml
   us-west-2:
     parameter_input: us-west-2.json
+    template_file: main-stack.template.yaml
+  # Canada Regions
+  ca-central-1:
+    parameter_input: ca-central-1.json
+    template_file: main-stack.template.yaml
+  # Europe Regions
+  eu-central-1:
+    parameter_input: eu-central-1.json
+    template_file: main-stack.template.yaml
+  eu-west-1:
+    parameter_input: eu-west-1.json
+    template_file: main-stack.template.yaml
+  eu-west-2:
+    parameter_input: eu-west-2.json
+    template_file: main-stack.template.yaml
+  eu-west-3:
+    parameter_input: eu-west-3.json
+    template_file: main-stack.template.yaml
+  eu-north-1:
+    parameter_input: eu-north-1.json
+    template_file: main-stack.template.yaml
+  # Asia Pacific Regions
+  ap-south-1:
+    parameter_input: ap-south-1.json
+    template_file: main-stack.template.yaml
+  ap-northeast-1:
+    parameter_input: ap-northeast-1.json
+    template_file: main-stack.template.yaml
+  ap-northeast-2:
+    parameter_input: ap-northeast-2.json
+    template_file: main-stack.template.yaml
+  ap-northeast-3:
+    parameter_input: ap-northeast-3.json
+    template_file: main-stack.template.yaml
+  ap-southeast-1:
+    parameter_input: ap-southeast-1.json
+    template_file: main-stack.template.yaml
+  ap-southeast-2:
+    parameter_input: ap-southeast-2.json
+    template_file: main-stack.template.yaml
+  # South America Regions
+  sa-east-1:
+    parameter_input: sa-east-1.json
     template_file: main-stack.template.yaml
