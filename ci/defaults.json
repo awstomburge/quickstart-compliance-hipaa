@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "AWSConfigARN",
-        "ParameterValue": "change-to-aws-config-role-arn"
+        "ParameterValue": "arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig"
     },
     {
         "ParameterKey": "LifecycleExpirationDays",
@@ -101,7 +101,7 @@
     },
     {
         "ParameterKey": "QSS3BucketName",
-        "ParameterValue": "aws-quickstart"
+        "ParameterValue": "npo-health-qs-test"
     },
     {
         "ParameterKey": "QSS3BucketRegion",

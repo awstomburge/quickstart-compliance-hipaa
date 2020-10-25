@@ -7,11 +7,11 @@ project:
   - us-east-2
   - us-west-1
   - us-west-2
-  s3_bucket: ''
+  s3_bucket: 'npo-health-qs-test'
 tests:
   compl-hipaa:
     parameters:
-      AWSConfigARN: change-to-aws-config-role-arn
+      AWSConfigARN: arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
       LifecycleExpirationDays: 2555
       LifecycleTransitionStandardIADays: 90
       LifecycleTransitionGlacierDays: 180
@@ -36,7 +36,7 @@ tests:
       MgmtVPCPrivateSubnet2: 172.16.12.0/24
       MgmtVPCFlowLogLogGroup: mgmt-flow-logs-group
       MgmtVPCFlowLogLogGroupRetention: 90
-      QSS3BucketName: aws-quickstart
+      QSS3BucketName: npo-health-qs-test
       QSS3BucketRegion: us-east-1
       QSS3KeyPrefix: quickstart-compliance-hipaa/
     regions:
@@ -44,5 +44,5 @@ tests:
     - us-east-2
     - us-west-1
     - us-west-2
-    s3_bucket: ''
+    s3_bucket: 'npo-health-qs-test'
     template: templates/main-stack.template.yaml
