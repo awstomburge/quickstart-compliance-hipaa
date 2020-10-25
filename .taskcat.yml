@@ -9,7 +9,44 @@ project:
   # - us-west-2
   s3_bucket: ''
 tests:
-  compl-hipaa:
+  # compl-hipaa:
+  #   parameters:
+  #     AWSConfigARN: arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+  #     LifecycleExpirationDays: 2555
+  #     LifecycleTransitionStandardIADays: 90
+  #     LifecycleTransitionGlacierDays: 180
+  #     SNSAlarmEmail: change@me.com
+  #     CloudTrailLogRetentionDays: 90
+  #     DevVPCCIDRBlock: 172.18.0.0/16
+  #     DevVPCSubnet1: 172.18.11.0/24
+  #     DevVPCSubnet2: 172.18.12.0/24
+  #     DevVPCSubnet3: 172.18.13.0/24
+  #     DevVPCFlowLogLogGroup: dev-flow-logs-group
+  #     DevVPCFlowLogLogGroupRetention: 90
+  #     ProdVPCCIDRBlock: 172.17.0.0/16
+  #     ProdVPCSubnet1: 172.17.11.0/24
+  #     ProdVPCSubnet2: 172.17.12.0/24
+  #     ProdVPCSubnet3: 172.17.13.0/24
+  #     ProdVPCFlowLogLogGroup: prod-flow-logs-group
+  #     ProdVPCFlowLogLogGroupRetention: 90
+  #     MgmtVPCCIDRBlock: 172.16.0.0/16
+  #     MgmtVPCPublicSubnet1: 172.16.1.0/24
+  #     MgmtVPCPublicSubnet2: 172.16.2.0/24
+  #     MgmtVPCPrivateSubnet1: 172.16.11.0/24
+  #     MgmtVPCPrivateSubnet2: 172.16.12.0/24
+  #     MgmtVPCFlowLogLogGroup: mgmt-flow-logs-group
+  #     MgmtVPCFlowLogLogGroupRetention: 90
+  #     QSS3BucketName: $[taskcat_autobucket]
+  #     QSS3BucketRegion: $[taskcat_current_region]
+  #     QSS3KeyPrefix: quickstart-compliance-hipaa/
+  #   regions:
+  #   - us-east-1
+  #   # - us-east-2
+  #   # - us-west-1
+  #   # - us-west-2
+  #   s3_bucket: ''
+  #   template: templates/main-stack.template.yaml
+  us-east-1:
     parameters:
       AWSConfigARN: arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
       LifecycleExpirationDays: 2555
@@ -37,10 +74,47 @@ tests:
       MgmtVPCFlowLogLogGroup: mgmt-flow-logs-group
       MgmtVPCFlowLogLogGroupRetention: 90
       QSS3BucketName: $[taskcat_autobucket]
-      QSS3BucketRegion: $[taskcat_current_region]
+      QSS3BucketRegion: us-east-1
       QSS3KeyPrefix: quickstart-compliance-hipaa/
     regions:
     - us-east-1
+    # - us-east-2
+    # - us-west-1
+    # - us-west-2
+    s3_bucket: ''
+    template: templates/main-stack.template.yaml
+  us-east-2:
+    parameters:
+      AWSConfigARN: arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
+      LifecycleExpirationDays: 2555
+      LifecycleTransitionStandardIADays: 90
+      LifecycleTransitionGlacierDays: 180
+      SNSAlarmEmail: change@me.com
+      CloudTrailLogRetentionDays: 90
+      DevVPCCIDRBlock: 172.18.0.0/16
+      DevVPCSubnet1: 172.18.11.0/24
+      DevVPCSubnet2: 172.18.12.0/24
+      DevVPCSubnet3: 172.18.13.0/24
+      DevVPCFlowLogLogGroup: dev-flow-logs-group
+      DevVPCFlowLogLogGroupRetention: 90
+      ProdVPCCIDRBlock: 172.17.0.0/16
+      ProdVPCSubnet1: 172.17.11.0/24
+      ProdVPCSubnet2: 172.17.12.0/24
+      ProdVPCSubnet3: 172.17.13.0/24
+      ProdVPCFlowLogLogGroup: prod-flow-logs-group
+      ProdVPCFlowLogLogGroupRetention: 90
+      MgmtVPCCIDRBlock: 172.16.0.0/16
+      MgmtVPCPublicSubnet1: 172.16.1.0/24
+      MgmtVPCPublicSubnet2: 172.16.2.0/24
+      MgmtVPCPrivateSubnet1: 172.16.11.0/24
+      MgmtVPCPrivateSubnet2: 172.16.12.0/24
+      MgmtVPCFlowLogLogGroup: mgmt-flow-logs-group
+      MgmtVPCFlowLogLogGroupRetention: 90
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: us-east-2
+      QSS3KeyPrefix: quickstart-compliance-hipaa/
+    regions:
+    # - us-east-1
     - us-east-2
     # - us-west-1
     # - us-west-2
