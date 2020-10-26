@@ -144,9 +144,7 @@ cython_debug/
 .vscode/
 
 # custom files
-config.py
-delete_buckets.py
-delete_buckets.bat
-buckets.txt
 no-commit
 no-commit/
+quickstart-compliance-hipaa-cdk/hchcns
+quickstart-compliance-hipaa-cdk/hchcns/
