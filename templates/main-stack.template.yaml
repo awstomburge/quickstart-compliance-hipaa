@@ -52,7 +52,7 @@ Metadata:
         default: AWS Quick Start Configuration
       Parameters:
       - QSS3BucketName
-      - QSS3Region
+      - QSS3BucketRegion
       - QSS3KeyPrefix
     ParameterLabels:
       AWSConfigARN:
@@ -101,7 +101,7 @@ Metadata:
         default: Management VPC Log Group Retention Days
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
-      QSS3Region:
+      QSS3BucketRegion:
         default: Quick Start S3 bucket region
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
@@ -208,7 +208,7 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
-  QSS3Region:
+  QSS3BucketRegion:
     Default: us-east-1
     Description: The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
     Type: String
@@ -243,16 +243,18 @@ Mappings:
       ConfigRules: 'true'
       NatGateway: 'true'
       Glacier: 'true'
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   ConfigStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/config-stack.template.yaml'
-          - QSS3BucketName: !Ref QSS3BucketName
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/config-stack.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
-            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         AWSConfigARN: !Ref AWSConfigARN
@@ -263,10 +265,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/log-stack.template.yaml'
-          - QSS3BucketName: !Ref QSS3BucketName
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/log-stack.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
-            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         SNSAlarmEmail: !Ref SNSAlarmEmail
@@ -279,10 +281,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/dev-stack.template.yaml'
-          - QSS3BucketName: !Ref QSS3BucketName
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/dev-stack.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
-            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
@@ -295,10 +297,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/prod-stack.template.yaml'
-          - QSS3BucketName: !Ref QSS3BucketName
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prod-stack.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
-            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
@@ -311,10 +313,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/mgmt-stack.template.yaml'
-          - QSS3BucketName: !Ref QSS3BucketName
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/mgmt-stack.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
-            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         MgmtVPCCIDRBlock: !Ref MgmtVPCCIDRBlock
@@ -329,10 +331,10 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3BucketName}/${QSS3KeyPrefix}templates/tgw-stack.template.yaml'
-          - QSS3BucketName: !Ref QSS3BucketName
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/tgw-stack.template.yaml'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
-            QSS3Region: !Ref QSS3Region
       TimeoutInMinutes: 20
       Parameters:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
