@@ -251,7 +251,7 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${QSS3BucketName}.s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/config-stack.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/config-stack.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -265,7 +265,7 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${QSS3BucketName}.s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/log-stack.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/log-stack.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -281,7 +281,7 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${QSS3BucketName}.s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/dev-stack.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/dev-stack.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -297,7 +297,7 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${QSS3BucketName}.s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prod-stack.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prod-stack.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -313,7 +313,7 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${QSS3BucketName}.s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/mgmt-stack.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/mgmt-stack.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -331,7 +331,7 @@ Resources:
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${QSS3BucketName}.s3.${QSS3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/tgw-stack.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/tgw-stack.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
