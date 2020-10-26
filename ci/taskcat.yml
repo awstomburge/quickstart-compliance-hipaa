@@ -12,7 +12,6 @@ global:
   - ap-south-1
   - ap-northeast-1
   - ap-northeast-2
-  - ap-northeast-3
   - ap-southeast-1
   - ap-southeast-2
   - eu-central-1
@@ -65,9 +64,6 @@ tests:
     template_file: main-stack.template.yaml
   ap-northeast-2:
     parameter_input: ap-northeast-2.json
-    template_file: main-stack.template.yaml
-  ap-northeast-3:
-    parameter_input: ap-northeast-3.json
     template_file: main-stack.template.yaml
   ap-southeast-1:
     parameter_input: ap-southeast-1.json

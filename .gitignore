@@ -114,8 +114,6 @@ env.bak/
 venv.bak/
 taskcat
 taskcat/
-taskcat2
-taskcat2/
 
 # Spyder project settings
 .spyderproject
@@ -140,3 +138,13 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# VS Code Files
+.vscode
+.vscode/
+
+# custom files
+config.py
+delete_buckets.py
+delete_buckets.bat
+buckets.txt
