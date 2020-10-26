@@ -148,3 +148,5 @@ config.py
 delete_buckets.py
 delete_buckets.bat
 buckets.txt
+no-commit
+no-commit/
