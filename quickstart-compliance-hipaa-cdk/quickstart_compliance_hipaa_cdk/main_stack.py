@@ -8,40 +8,40 @@ class MainStack(core.Stack):
 
         # The code that defines your stack goes here
 
-        cf.CfnStack(self,
-            id='ConfigStack',
-            template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        )
+        # cf.CfnStack(self,
+        #     id='ConfigStack',
+        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
+        # )
 
-        cf.CfnStack(self,
-            id='LogStack',
-            template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        )
+        # cf.CfnStack(self,
+        #     id='LogStack',
+        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
+        # )
 
-        cf.CfnStack(self,
-            id='DevStack',
-            template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        )
+        # cf.CfnStack(self,
+        #     id='DevStack',
+        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
+        # )
 
-        cf.CfnStack(self,
-            id='ProdStack',
-            template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        )
+        # cf.CfnStack(self,
+        #     id='ProdStack',
+        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
+        # )
 
-        cf.CfnStack(self,
-            id='MgmtStack',
-            template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        )
+        # cf.CfnStack(self,
+        #     id='MgmtStack',
+        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
+        # )
 
-        cf.CfnStack(self,
-            id='TgwStack',
-            template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        )
+        # cf.CfnStack(self,
+        #     id='TgwStack',
+        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
+        # )
 
         # Config Parameters
         self.aws_config_arn = core.CfnParameter(self,
             id='AWS Config ARN',
-            default='change-to-aws-config-role-arn',
+            default='arn:aws:iam::501353236270:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig',
             description='AWS Config Service Linked Role ARN',
             type='String'
         )
@@ -106,15 +106,8 @@ class MainStack(core.Stack):
 
         self.dev_subnet_2 = core.CfnParameter(self,
             id='Dev VPC Subnet 2',
-            default='172.18.11.0/24',
+            default='172.18.12.0/24',
             description='Development VPC Subnet 2',
-            type='String'
-        )
-
-        self.dev_subnet_3 = core.CfnParameter(self,
-            id='Dev VPC Subnet 3',
-            default='172.18.11.0/24',
-            description='Development VPC Subnet 3',
             type='String'
         )
 
@@ -142,22 +135,15 @@ class MainStack(core.Stack):
 
         self.prod_subnet_1 = core.CfnParameter(self,
             id='Prod VPC Subnet 1',
-            default='172.17.11.0/16',
+            default='172.17.11.0/24',
             description='Production VPC Subnet 1',
             type='String'
         )
 
         self.prod_subnet_2 = core.CfnParameter(self,
             id='Prod VPC Subnet 2',
-            default='172.17.12.0/16',
+            default='172.17.12.0/24',
             description='Production VPC Subnet 2',
-            type='String'
-        )
-
-        self.prod_subnet_3 = core.CfnParameter(self,
-            id='Prod VPC Subnet 3',
-            default='172.17.13.0/16',
-            description='Production VPC Subnet 3',
             type='String'
         )
 

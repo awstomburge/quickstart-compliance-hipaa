@@ -5,11 +5,11 @@ import aws_cdk.aws_logs as logs
 
 class MgmtStack(core.NestedStack):
 
-    def __init__(self, scope: core.Construct, id: str, main_stack, prod_stack, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # The code that defines your stack goes here
-        self.add_dependency(prod_stack)
+        # self.add_dependency(prod_stack)
 
         region = 'us-east-1'
 

@@ -89,12 +89,14 @@ Metadata:
         default: Production VPC Log Group Retention Days
       MgmtVPCCIDRBlock:
         default: Management VPC CIDR Block
-      MgmtVPCSubnet1:
-        default: Management Subnet 1 CIDR Block
-      MgmtVPCSubnet2:
-        default: Management Subnet 2 CIDR Block
-      MgmtVPCSubnet3:
-        default: Management Subnet 2 CIDR Block
+      MgmtVPCPublicSubnet1:
+        default: Management Public Subnet 1 CIDR Block
+      MgmtVPCPublicSubnet2:
+        default: Management Public Subnet 2 CIDR Block
+      MgmtVPCPrivateSubnet1:
+        default: Management Private Subnet 1 CIDR Block
+      MgmtVPCPrivateSubnet2:
+        default: Management Private Subnet 2 CIDR Block
       MgmtVPCFlowLogLogGroup:
         default: Management VPC Log Group
       MgmtVPCFlowLogLogGroupRetention:
@@ -108,7 +110,7 @@ Metadata:
 Parameters:
   AWSConfigARN:
     Type: String
-    Default: change-arn-aws-config-role-arn
+    Default: ''
     Description: AWS Config Service Linked Role ARN
   LifecycleExpirationDays:
     Type: Number
@@ -124,7 +126,7 @@ Parameters:
     Description: Lifecycle Transition Glacier Days
   SNSAlarmEmail:
     Type: String
-    Default: change@me.com
+    Default: ''
     Description: SNS Security Alarm Email
   CloudTrailLogRetentionDays:
     Type: Number
