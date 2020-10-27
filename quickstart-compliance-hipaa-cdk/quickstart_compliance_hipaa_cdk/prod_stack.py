@@ -5,11 +5,10 @@ import aws_cdk.aws_logs as logs
 
 class ProdStack(core.NestedStack):
 
-    def __init__(self, scope: core.Construct, id: str, main_stack, dev_stack, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # The code that defines your stack goes here
-        self.add_dependency(dev_stack)
 
         region = 'us-east-1'
 
@@ -103,14 +102,6 @@ class ProdStack(core.NestedStack):
             map_public_ip_on_launch=False,
             tags=[{"key":"Name", "value":"Production Core Subnet 2"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.prod_core_3 = ec2.CfnSubnet(self, 
-            id="Production Core Subnet 3",
-            cidr_block=main_stack.prod_subnet_3.value_as_string,
-            vpc_id=self.vpc.ref,
-            availability_zone=region + "c",
-            map_public_ip_on_launch=False,
-            tags=[{"key":"Name", "value":"Production Core Subnet 3"}, {"key": "Purpose", "value": "Networking"}]
-        )
 
         # Create Route Tables
         self.pri_rt_1 = ec2.CfnRouteTable(self,
@@ -129,9 +120,4 @@ class ProdStack(core.NestedStack):
             id="Production Core 2 Route Association",
             route_table_id=self.pri_rt_1.ref,
             subnet_id=self.prod_core_2.ref
-        )
-        self.prod_core_3_ass = ec2.CfnSubnetRouteTableAssociation(self,
-            id="Production Core 3 Route Association",
-            route_table_id=self.pri_rt_1.ref,
-            subnet_id=self.prod_core_3.ref
         )

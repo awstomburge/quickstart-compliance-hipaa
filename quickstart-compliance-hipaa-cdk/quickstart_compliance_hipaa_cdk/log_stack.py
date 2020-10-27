@@ -194,6 +194,28 @@ class LogStack(core.NestedStack):
             ]
         )
 
+        self.topic_policy = {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Sid": "AWSCloudTrailSNSPolicy20131101",
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "cloudtrail.amazonaws.com"
+                    },
+                    "Action": "SNS:Publish",
+                    "Resource": self.security_alarm_topic.ref
+                }
+            ]
+        }
+
+        # Create SNS Topic Policy
+        self.security_alarm_topic_policy = sns.CfnTopicPolicy(self,
+            id='SNS Security Alarm Topic Policy',
+            topics=[self.security_alarm_topic.ref],
+            policy_document=self.topic_policy
+        )
+
         # Log Groups
         self.cloudtrail_log_group = logs.CfnLogGroup(self, 
             id='CloudTrail Log Group',

@@ -34,7 +34,7 @@ class TgwStack(core.NestedStack):
 
         self.prod_tgw_attach_1 = ec2.CfnTransitGatewayAttachment(self,
             id='Production VPC to Transit Gateway',
-            subnet_ids=[prod_stack.prod_core_1.ref, prod_stack.prod_core_2.ref, prod_stack.prod_core_3.ref],
+            subnet_ids=[prod_stack.prod_core_1.ref, prod_stack.prod_core_2.ref],
             transit_gateway_id=self.tgw.ref,
             vpc_id=prod_stack.vpc.ref,
             tags=[{"key":"Name", "value":"Production Transit Gateway Attachment"}, {"key": "Purpose", "value": "Networking"}]
@@ -42,7 +42,7 @@ class TgwStack(core.NestedStack):
 
         self.dev_tgw_attach_1 = ec2.CfnTransitGatewayAttachment(self,
             id='Dev VPC to Transit Gateway',
-            subnet_ids=[dev_stack.dev_core_1.ref, dev_stack.dev_core_2.ref, dev_stack.dev_core_3.ref],
+            subnet_ids=[dev_stack.dev_core_1.ref, dev_stack.dev_core_2.ref],
             transit_gateway_id=self.tgw.ref,
             vpc_id=dev_stack.vpc.ref,
             tags=[{"key":"Name", "value":"Development Transit Gateway Attachment"}, {"key": "Purpose", "value": "Networking"}]
