@@ -64,6 +64,13 @@ class ConfigStack(core.NestedStack):
             policy_document=config_bucket_policy
         )
 
+        # Upload Conformance Pack to Bucket
+
+        self.hipaa_pack = s3_assets.Asset(self,
+            id='HIPAA Conformance Pack',
+            path='./quickstart_compliance_hipaa_cdk/Operational-Best-Practices-for-HIPAA-Security.yaml'
+        )
+
         # Create AWS Config Delivery Channel
         self.config_dc = aws_config.CfnDeliveryChannel(self,
             id='AWS Config Delivery Channel',
@@ -82,5 +89,5 @@ class ConfigStack(core.NestedStack):
         self.config_hipaa_pack = aws_config.CfnConformancePack(self,
             id='AWS Config HIPAA Conformance Pack',
             conformance_pack_name='aws-config-hipaa-conformance-pack',
-            template_s3_uri=main_stack.aws_config_hipaa.value_as_string
+            template_s3_uri=self.hipaa_pack.s3_object_url
         )

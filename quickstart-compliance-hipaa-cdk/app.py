@@ -30,12 +30,12 @@ config_stack = ConfigStack(main_stack, 'config-stack', main_stack=main_stack)
 # Log Stack-------------------------------------------------------------------------------------------------
 log_stack = LogStack(main_stack, 'log-stack', main_stack=main_stack)
 # Development Stack-----------------------------------------------------------------------------------------
-dev_stack = DevStack(main_stack, 'dev-stack', main_stack=main_stack, log_stack=log_stack)
-# Production Stack------------------------------------------------------------------------------------------
-prod_stack = ProdStack(main_stack, 'prod-stack', main_stack=main_stack, dev_stack=dev_stack)
-# Management Stack------------------------------------------------------------------------------------------
-mgmt_stack = MgmtStack(main_stack, 'mgmt-stack', main_stack=main_stack, prod_stack=prod_stack)
-# Transit Gateway Stack-------------------------------------------------------------------------------------
+dev_stack = DevStack(main_stack, 'dev-stack', main_stack=main_stack)
+# # Production Stack------------------------------------------------------------------------------------------
+prod_stack = ProdStack(main_stack, 'prod-stack', main_stack=main_stack)
+# # Management Stack------------------------------------------------------------------------------------------
+mgmt_stack = MgmtStack(main_stack, 'mgmt-stack', main_stack=main_stack)
+# # Transit Gateway Stack-------------------------------------------------------------------------------------
 tgw_stack = TgwStack(main_stack, 'tgw-stack',
     main_stack=main_stack,
     dev_stack=dev_stack, 

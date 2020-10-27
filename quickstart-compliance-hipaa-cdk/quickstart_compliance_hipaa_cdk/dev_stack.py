@@ -5,11 +5,10 @@ import aws_cdk.aws_logs as logs
 
 class DevStack(core.NestedStack):
 
-    def __init__(self, scope: core.Construct, id: str, main_stack, log_stack, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # The code that defines your stack goes here
-        self.add_dependency(log_stack)
 
         region = 'us-east-1'
 
@@ -103,14 +102,6 @@ class DevStack(core.NestedStack):
             map_public_ip_on_launch=False,
             tags=[{"key":"Name", "value":"Development Core Subnet 2"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.dev_core_3 = ec2.CfnSubnet(self, 
-            id="Dev Core Subnet 3",
-            cidr_block=main_stack.dev_subnet_3.value_as_string,
-            vpc_id=self.vpc.ref,
-            availability_zone=region + "c",
-            map_public_ip_on_launch=False,
-            tags=[{"key":"Name", "value":"Development Core Subnet 3"}, {"key": "Purpose", "value": "Networking"}]
-        )
 
         # Create Route Table
         self.pri_rt_1 = ec2.CfnRouteTable(self,
@@ -129,9 +120,4 @@ class DevStack(core.NestedStack):
             id="Dev Core 2 Route Association",
             route_table_id=self.pri_rt_1.ref,
             subnet_id=self.dev_core_2.ref
-        )
-        self.dev_core_3_ass = ec2.CfnSubnetRouteTableAssociation(self,
-            id="Dev Core 3 Route Association",
-            route_table_id=self.pri_rt_1.ref,
-            subnet_id=self.dev_core_3.ref
         )
