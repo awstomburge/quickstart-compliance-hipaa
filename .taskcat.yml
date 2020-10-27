@@ -22,7 +22,7 @@ project:
   - eu-north-1
   - sa-east-1
 tests:
-  us-east-1:
+  default-test:
     parameters:
       AWSConfigARN: arn:aws:iam::602295563133:role/aws-service-role/config.amazonaws.com/AWSServiceRoleForConfig
       LifecycleExpirationDays: 2555
