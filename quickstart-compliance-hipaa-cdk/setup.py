@@ -42,7 +42,6 @@ setuptools.setup(
         "aws-cdk.aws-sqs==1.69.0",
         "aws-cdk.aws-ssm==1.69.0",
         "aws-cdk.cloud-assembly-schema==1.69.0",
-        "aws-cdk.core==1.69.0",
         "aws-cdk.cx-api==1.69.0",
         "aws-cdk.region-info==1.69.0",
         "cattrs==1.0.0",
