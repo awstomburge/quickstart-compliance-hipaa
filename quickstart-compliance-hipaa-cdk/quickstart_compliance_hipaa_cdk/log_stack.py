@@ -11,8 +11,6 @@ class LogStack(core.NestedStack):
     def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
-
         # Create S3 Buckets and Bucket Policies
 
         # AWS Logging Bucket
@@ -186,7 +184,7 @@ class LogStack(core.NestedStack):
         # Create SNS Topic
         self.security_alarm_topic = sns.CfnTopic(self,
             id='SNS Security Alarm Topic',
-            subscription=[ 
+            subscription=[
                 sns.CfnTopic.SubscriptionProperty(
                     endpoint=main_stack.sns_alarm_email.value_as_string,
                     protocol='email'
@@ -217,7 +215,7 @@ class LogStack(core.NestedStack):
         )
 
         # Log Groups
-        self.cloudtrail_log_group = logs.CfnLogGroup(self, 
+        self.cloudtrail_log_group = logs.CfnLogGroup(self,
             id='CloudTrail Log Group',
             log_group_name='cloudtrail-log-group',
             retention_in_days=main_stack.ct_log_ret.value_as_number
@@ -255,7 +253,7 @@ class LogStack(core.NestedStack):
                     ],
                     "Resource": self.logging_bucket.attr_arn + "/*"
                 }
-            ]    
+            ]
         }
 
         cloudwatch_assume_role = {
@@ -287,10 +285,10 @@ class LogStack(core.NestedStack):
                     "Action": "logs:PutLogEvents",
                     "Resource": self.cloudtrail_log_group.attr_arn
                 }
-            ]    
+            ]
         }
 
-        self.cloudtrail_role = iam.CfnRole(self, 
+        self.cloudtrail_role = iam.CfnRole(self,
             id='CloudTrail Role',
             description='CloudTrail Role',
             path='/',
@@ -303,7 +301,7 @@ class LogStack(core.NestedStack):
             ]
         )
 
-        self.cloudwatch_role = iam.CfnRole(self, 
+        self.cloudwatch_role = iam.CfnRole(self,
             id='CloudWatch Role',
             description='CloudWatch Role',
             path='/',

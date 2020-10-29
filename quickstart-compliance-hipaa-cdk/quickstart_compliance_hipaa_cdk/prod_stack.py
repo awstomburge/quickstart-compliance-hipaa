@@ -8,8 +8,6 @@ class ProdStack(core.NestedStack):
     def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
-
         region = 'us-east-1'
 
         # VPC Flow Logs Log Group
@@ -50,7 +48,7 @@ class ProdStack(core.NestedStack):
             ]
         }
 
-        self.prod_flow_logs_role = iam.CfnRole(self, 
+        self.prod_flow_logs_role = iam.CfnRole(self,
             id='Production Flow Logs Role',
             description='Production Flow Logs Role',
             path='/',
@@ -86,7 +84,7 @@ class ProdStack(core.NestedStack):
         self.prod_vpc_flow_logs.add_depends_on(self.prod_vpc_flow_log_group)
 
         # Creates Subnets
-        self.prod_core_1 = ec2.CfnSubnet(self, 
+        self.prod_core_1 = ec2.CfnSubnet(self,
             id="Production Core Subnet 1",
             cidr_block=main_stack.prod_subnet_1.value_as_string,
             vpc_id=self.vpc.ref,
@@ -94,7 +92,7 @@ class ProdStack(core.NestedStack):
             map_public_ip_on_launch=False,
             tags=[{"key":"Name", "value":"Production Core Subnet 1"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.prod_core_2 = ec2.CfnSubnet(self, 
+        self.prod_core_2 = ec2.CfnSubnet(self,
             id="Production Core Subnet 2",
             cidr_block=main_stack.prod_subnet_2.value_as_string,
             vpc_id=self.vpc.ref,

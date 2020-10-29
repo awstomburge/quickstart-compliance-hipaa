@@ -6,37 +6,6 @@ class MainStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
-
-        # cf.CfnStack(self,
-        #     id='ConfigStack',
-        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        # )
-
-        # cf.CfnStack(self,
-        #     id='LogStack',
-        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        # )
-
-        # cf.CfnStack(self,
-        #     id='DevStack',
-        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        # )
-
-        # cf.CfnStack(self,
-        #     id='ProdStack',
-        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        # )
-
-        # cf.CfnStack(self,
-        #     id='MgmtStack',
-        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        # )
-
-        # cf.CfnStack(self,
-        #     id='TgwStack',
-        #     template_url='https://bucket.s3.region.amazonaws.com/mainstackconfigstack8791BFD3.nested.template.json'
-        # )
 
         # Config Parameters
         self.aws_config_arn = core.CfnParameter(self,

@@ -8,8 +8,6 @@ class DevStack(core.NestedStack):
     def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
-
         region = 'us-east-1'
 
         # VPC Flow Logs Log Group
@@ -50,7 +48,7 @@ class DevStack(core.NestedStack):
             ]
         }
 
-        self.dev_flow_logs_role = iam.CfnRole(self, 
+        self.dev_flow_logs_role = iam.CfnRole(self,
             id='Development Flow Logs Role',
             description='Development Flow Logs Role',
             path='/',
@@ -86,15 +84,15 @@ class DevStack(core.NestedStack):
         self.dev_vpc_flow_logs.add_depends_on(self.dev_vpc_flow_log_group)
 
         # Creates Subnets
-        self.dev_core_1 = ec2.CfnSubnet(self, 
+        self.dev_core_1 = ec2.CfnSubnet(self,
             id="Dev Core Subnet 1",
             cidr_block=main_stack.dev_subnet_1.value_as_string,
             vpc_id=self.vpc.ref,
-            availability_zone=region + "a", 
+            availability_zone=region + "a",
             map_public_ip_on_launch=False,
             tags=[{"key":"Name", "value":"Development Core Subnet 1"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.dev_core_2 = ec2.CfnSubnet(self, 
+        self.dev_core_2 = ec2.CfnSubnet(self,
             id="Dev Core Subnet 2",
             cidr_block=main_stack.dev_subnet_2.value_as_string,
             vpc_id=self.vpc.ref,

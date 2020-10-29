@@ -8,9 +8,6 @@ class MgmtStack(core.NestedStack):
     def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
-        # self.add_dependency(prod_stack)
-
         region = 'us-east-1'
 
         # VPC Flow Logs Log Group
@@ -52,7 +49,7 @@ class MgmtStack(core.NestedStack):
             ]
         }
 
-        self.mgmt_flow_logs_role = iam.CfnRole(self, 
+        self.mgmt_flow_logs_role = iam.CfnRole(self,
             id='Management Flow Logs Role',
             description='Management Flow Logs Role',
             path='/',
@@ -87,7 +84,7 @@ class MgmtStack(core.NestedStack):
         self.mgmt_vpc_flow_logs.add_depends_on(self.mgmt_vpc_flow_log_group)
 
         # Creates Subnets
-        self.mgmt_dmz_1 = ec2.CfnSubnet(self, 
+        self.mgmt_dmz_1 = ec2.CfnSubnet(self,
             id="Management DMZ Subnet 1",
             cidr_block=main_stack.mgmt_pub_subnet_1.value_as_string,
             vpc_id=self.vpc.ref,
@@ -95,7 +92,7 @@ class MgmtStack(core.NestedStack):
             map_public_ip_on_launch=True,
             tags=[{"key":"Name", "value":"Management DMZ Subnet 1"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.mgmt_dmz_2 = ec2.CfnSubnet(self, 
+        self.mgmt_dmz_2 = ec2.CfnSubnet(self,
             id="Management DMZ Subnet 2",
             cidr_block=main_stack.mgmt_pub_subnet_2.value_as_string,
             vpc_id=self.vpc.ref,
@@ -103,7 +100,7 @@ class MgmtStack(core.NestedStack):
             map_public_ip_on_launch=True,
             tags=[{"key":"Name", "value":"Management DMZ Subnet 2"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.mgmt_core_1 = ec2.CfnSubnet(self, 
+        self.mgmt_core_1 = ec2.CfnSubnet(self,
             id="Management Core Subnet 1",
             cidr_block=main_stack.mgmt_pri_subnet_1.value_as_string,
             vpc_id=self.vpc.ref,
@@ -111,7 +108,7 @@ class MgmtStack(core.NestedStack):
             map_public_ip_on_launch=False,
             tags=[{"key":"Name", "value":"Management Core Subnet 1"}, {"key": "Purpose", "value": "Networking"}]
         )
-        self.mgmt_core_2 = ec2.CfnSubnet(self, 
+        self.mgmt_core_2 = ec2.CfnSubnet(self,
             id="Management Core Subnet 2",
             cidr_block=main_stack.mgmt_pri_subnet_2.value_as_string,
             vpc_id=self.vpc.ref,
@@ -230,4 +227,3 @@ class MgmtStack(core.NestedStack):
             nat_gateway_id=self.mgmt_nat_2.ref,
             destination_cidr_block="0.0.0.0/0"
         )
-        

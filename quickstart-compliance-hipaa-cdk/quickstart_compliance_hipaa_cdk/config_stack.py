@@ -9,9 +9,6 @@ class ConfigStack(core.NestedStack):
     def __init__(self, scope: core.Construct, id: str, main_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
-        
-
         # Create S3 Bucket for AWS Config
 
         self.config_bucket = s3.CfnBucket(self,

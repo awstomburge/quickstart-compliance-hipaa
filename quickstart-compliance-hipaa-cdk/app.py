@@ -16,7 +16,7 @@ from quickstart_compliance_hipaa_cdk.prod_stack import ProdStack
 from quickstart_compliance_hipaa_cdk.tgw_stack import TgwStack
 # ----------------------------------------------------------------------------------------------------------
 # **********************************************************************************************************
-# Initilize App
+# Initialize App
 # **********************************************************************************************************
 # ----------------------------------------------------------------------------------------------------------
 app = core.App()
@@ -38,8 +38,8 @@ mgmt_stack = MgmtStack(main_stack, 'mgmt-stack', main_stack=main_stack)
 # # Transit Gateway Stack-------------------------------------------------------------------------------------
 tgw_stack = TgwStack(main_stack, 'tgw-stack',
     main_stack=main_stack,
-    dev_stack=dev_stack, 
-    prod_stack=prod_stack, 
+    dev_stack=dev_stack,
+    prod_stack=prod_stack,
     mgmt_stack=mgmt_stack
 )
 # **********************************************************************************************************

@@ -6,7 +6,6 @@ class TgwStack(core.NestedStack):
     def __init__(self, scope: core.Construct, id: str, main_stack, dev_stack, prod_stack, mgmt_stack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # The code that defines your stack goes here
         self.add_dependency(mgmt_stack)
         self.add_dependency(prod_stack)
         self.add_dependency(dev_stack)
