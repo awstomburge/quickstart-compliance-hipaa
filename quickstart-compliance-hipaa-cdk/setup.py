@@ -53,7 +53,7 @@ setuptools.setup(
         "typing-extensions==3.7.4.3",
     ],
 
-    python_requires=">=3.6",
+    python_requires=">=3.6, <3.9",
 
     classifiers=[
         "Development Status :: 4 - Beta",
