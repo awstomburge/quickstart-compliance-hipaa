@@ -1,0 +1,1 @@
+asciidoctor --base-dir docs/ --backend=html5 -o ../docs/index.html -w --doctype=book -a toc2 docs/boilerplate/index.adoc

@@ -1,7 +1,11 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Provisions HIPAA Ready Environment in AWS
+Description: Provisions HIPAA Ready Environment in AWS (qs-1rabh51k3)
 Metadata:
+  LintSpellExclude:
+    - CloudWatch
+    - CloudTrail
+  cfn-lint: { config: { ignore_checks: [ W9101 ] } }
   Identifier:
     Value: main
   Input:
@@ -11,24 +15,40 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Logging Configuration
+        default: Logging configuration
       Parameters:
       - SNSAlarmEmail
       - LifecycleExpirationDays
       - LifecycleTransitionStandardIADays
       - LifecycleTransitionGlacierDays
       - CloudTrailLogRetentionDays
+    ParameterLabels:
+      SNSAlarmEmail:
+        default: CloudWatch alarm notification email address
+      LifecycleExpirationDays:
+        default: S3 lifecycle expiration days
+      LifecycleTransitionStandardIADays:
+        default: S3 lifecycle transition to standard-IA days
+      LifecycleTransitionGlacierDays:
+        default: S3 lifecycle transition to glacier days
+      CloudTrailLogRetentionDays:
+        default: CloudTrail retention days
 Parameters:
   SNSAlarmEmail:
     Type: String
+    Description: SNS security alarm email.
   LifecycleExpirationDays:
-    Type: String
+    Type: Number
+    Description: Lifecycle expiration days.
   LifecycleTransitionStandardIADays:
-    Type: String
+    Type: Number
+    Description: Lifecycle transition standard-IA days.
   LifecycleTransitionGlacierDays:
-    Type: String
+    Type: Number
+    Description: Lifecycle transition glacier days.
   CloudTrailLogRetentionDays:
-    Type: String
+    Type: Number
+    Description: CloudTrail log group retention days.
 Resources:
   AWSLoggingBucket:
     Type: 'AWS::S3::Bucket'
@@ -60,6 +80,7 @@ Resources:
   AWSLoggingBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Bucket: !Ref AWSLoggingBucket
       PolicyDocument:
@@ -102,11 +123,10 @@ Resources:
             Condition:
               StringNotEquals:
                 's3:x-amz-server-side-encryption': AES256
-    DependsOn:
-      - AWSLoggingBucket
   AWSCloudTrailBucket:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       AccessControl: LogDeliveryWrite
       BucketEncryption:
@@ -189,8 +209,6 @@ Resources:
             Condition:
               StringNotEquals:
                 's3:x-amz-server-side-encryption': AES256
-    DependsOn:
-      - AWSCloudTrailBucket
   SNSSecurityAlarmTopic:
     Type: 'AWS::SNS::Topic'
     Properties:
@@ -304,7 +322,6 @@ Resources:
       TrailName: cloudtrail-trail
     DependsOn:
       - AWSCloudTrailBucketPolicy
-      - SNSSecurityAlarmTopic
   MetricFilterCloudTrailChange:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -317,8 +334,6 @@ Resources:
         - MetricName: CloudTrailChangeCount
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   MetricFilterIAMCreateAccessKey:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -328,8 +343,6 @@ Resources:
         - MetricName: NewAccessKeyCreated
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   MetricFilterIAMPolicyChanges:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -347,8 +360,6 @@ Resources:
         - MetricName: IAMPolicyEventCount
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   MetricFilterIAMRootActivity:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -360,8 +371,6 @@ Resources:
         - MetricName: RootUserPolicyEventCount
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   MetricFilterNetworkACLChanges:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -375,8 +384,6 @@ Resources:
         - MetricName: NetworkAclEventCount
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   MetricFilterSecurityGroupChanges:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -391,8 +398,6 @@ Resources:
         - MetricName: SecurityGroupEventCount
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   MetricFilterUnauthorizedAttempts:
     Type: 'AWS::Logs::MetricFilter'
     Properties:
@@ -402,8 +407,6 @@ Resources:
         - MetricName: UnauthorizedAttemptCount
           MetricNamespace: CloudTrailMetrics
           MetricValue: '1'
-    DependsOn:
-      - CloudTrailLogGroup
   CloudWatchAlarmCloudTrailChange:
     Type: 'AWS::CloudWatch::Alarm'
     Properties:
