@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Provisions HIPAA Ready Environment in AWS
+Description: Provisions HIPAA Ready Environment in AWS (qs-1rabh51k9)
 Metadata:
   Identifier:
     Value: main
@@ -11,7 +11,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Management VPC Configuration
+        default: Management VPC configuration
       Parameters:
       - MgmtVPCCIDRBlock
       - MgmtVPCPublicSubnet1
@@ -20,21 +20,48 @@ Metadata:
       - MgmtVPCPrivateSubnet2
       - MgmtVPCFlowLogLogGroup
       - MgmtVPCFlowLogLogGroupRetention
+    ParameterLabels:
+      MgmtVPCCIDRBlock:
+        default: Management VPC CIDR block
+      MgmtVPCPublicSubnet1:
+        default: Management public Subnet 1 CIDR block
+      MgmtVPCPublicSubnet2:
+        default: Management public Subnet 2 CIDR block
+      MgmtVPCPrivateSubnet1:
+        default: Management private Subnet 1 CIDR block
+      MgmtVPCPrivateSubnet2:
+        default: Management private Subnet 2 CIDR block
+      MgmtVPCFlowLogLogGroup:
+        default: Management VPC log group
+      MgmtVPCFlowLogLogGroupRetention:
+        default: Management VPC log group retention days
 Parameters:
   MgmtVPCCIDRBlock:
     Type: String
+    Description: Management VPC CIDR block.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   MgmtVPCPublicSubnet1:
     Type: String
+    Description: Management VPC public subnet 1.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   MgmtVPCPublicSubnet2:
     Type: String
+    Description: Management VPC public subnet 2.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   MgmtVPCPrivateSubnet1:
     Type: String
+    Description: Management VPC private subnet 1.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   MgmtVPCPrivateSubnet2:
     Type: String
+    Description: Management VPC private subnet 2.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   MgmtVPCFlowLogLogGroup:
     Type: String
+    Description: Management VPC flow logs log group.
   MgmtVPCFlowLogLogGroupRetention:
     Type: String
+    Description: Management VPC flow logs log group retention days.
 Resources:
   ManagementVPCFlowLogGroup:
     Type: 'AWS::Logs::LogGroup'

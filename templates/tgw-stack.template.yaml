@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Provisions HIPAA Ready Environment in AWS
+Description: Provisions HIPAA Ready Environment in AWS (qs-1rabh51ku)
 Metadata:
   Identifier:
     Value: main
@@ -11,60 +11,150 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Development VPC Configuration
+        default: Development VPC configuration
       Parameters:
       - DevVPCCIDRBlock
-      - DevVPCSubnet1
-      - DevVPCSubnet2
+      # - DevVPCSubnet1
+      # - DevVPCSubnet2
     - Label:
-        default: Production VPC Configuration
+        default: Production VPC configuration
       Parameters:
       - ProdVPCCIDRBlock
-      - ProdVPCSubnet1
-      - ProdVPCSubnet2
+      # - ProdVPCSubnet1
+      # - ProdVPCSubnet2
+    # - Label:
+    #     default: Management VPC configuration
+    #   Parameters:
+    #   - MgmtVPCCIDRBlock
+    #   - MgmtVPCPublicSubnet1
+    #   - MgmtVPCPublicSubnet2
+    #   - MgmtVPCPrivateSubnet1
+    #   - MgmtVPCPrivateSubnet2
     - Label:
-        default: Management VPC Configuration
+        default: Imported parameters
       Parameters:
-      - MgmtVPCCIDRBlock
-      - MgmtVPCPublicSubnet1
-      - MgmtVPCPublicSubnet2
-      - MgmtVPCPrivateSubnet1
-      - MgmtVPCPrivateSubnet2
+      - DevelopmentVPC
+      - DevelopmentVPCSubnet1
+      - DevelopmentVPCSubnet2
+      - DevelopmentPrivateRouteTable1
+      - ProductionVPC
+      - ProductionCoreSubnet1
+      - ProductionCoreSubnet2
+      - ProductionPrivateRouteTable1
+      - ManagementVPC
+      - ManagementCoreSubnet1
+      - ManagementCoreSubnet2
+      - ManagementPrivateRouteTable1
+      - ManagementPrivateRouteTable2
+      - ManagementPublicRouteTable1
+      - ManagementPublicRouteTable2
+    ParameterLabels:
+      DevVPCCIDRBlock:
+        default: Development VPC CIDR block
+      # DevVPCSubnet1:
+      #   default: Development Subnet 1 CIDR block
+      # DevVPCSubnet2:
+      #   default: Development Subnet 2 CIDR block
+      ProdVPCCIDRBlock:
+        default: Production VPC CIDR block
+      # ProdVPCSubnet1:
+      #   default: Production Subnet 1 CIDR block
+      # ProdVPCSubnet2:
+      #   default: Production Subnet 2 CIDR block
+      # MgmtVPCCIDRBlock:
+      #   default: Management VPC CIDR block
+      # MgmtVPCPublicSubnet1:
+      #   default: Management public Subnet 1 CIDR block
+      # MgmtVPCPublicSubnet2:
+      #   default: Management public Subnet 2 CIDR block
+      # MgmtVPCPrivateSubnet1:
+      #   default: Management private Subnet 1 CIDR block
+      # MgmtVPCPrivateSubnet2:
+      #   default: Management private Subnet 2 CIDR block
+      DevelopmentVPC:
+        default: Development VPC
+      DevelopmentVPCSubnet1:
+        default: Development VPC subnet 1
+      DevelopmentVPCSubnet2:
+        default: Development VPC subnet 2
+      DevelopmentPrivateRouteTable1:
+        default: Development VPC private route table 1
+      ProductionVPC:
+        default: Production VPC
+      ProductionCoreSubnet1:
+        default: Production VPC private subnet 1
+      ProductionCoreSubnet2:
+        default: Production VPC private subnet 2
+      ProductionPrivateRouteTable1:
+        default: Production VPC private route table 1
+      ManagementVPC:
+        default: Management VPC
+      ManagementCoreSubnet1:
+        default: Management VPC private subnet 1
+      ManagementCoreSubnet2:
+        default: Management VPC private subnet 2
+      ManagementPrivateRouteTable1:
+        default: Management VPC private route table 1
+      ManagementPrivateRouteTable2:
+        default: Management VPC private route table 2
+      ManagementPublicRouteTable1:
+        default: Management VPC public route table 1
+      ManagementPublicRouteTable2:
+        default: Management VPC public route table 2
 Parameters:
   DevelopmentVPC:
     Type: String
+    Description: Development VPC.
   DevelopmentVPCSubnet1:
     Type: String
+    Description: Development VPC private subnet 1.
   DevelopmentVPCSubnet2:
     Type: String
+    Description: Development VPC private subnet 2.
   DevelopmentPrivateRouteTable1:
     Type: String
+    Description: Development VPC private route table 1.
   ProductionVPC:
     Type: String
+    Description: Production VPC.
   ProductionCoreSubnet1:
     Type: String
+    Description: Production VPC private subnet 1.
   ProductionCoreSubnet2:
     Type: String
+    Description: Production VPC private subnet 2.
   ProductionPrivateRouteTable1:
     Type: String
+    Description: Production VPC private route table 1.
   ManagementVPC:
     Type: String
+    Description: Management VPC.
   ManagementCoreSubnet1:
     Type: String
+    Description: Management VPC private subnet 1.
   ManagementCoreSubnet2:
     Type: String
+    Description: Management VPC private subnet 2.
   ManagementPrivateRouteTable1:
     Type: String
+    Description: Management VPC private route table 1.
   ManagementPrivateRouteTable2:
     Type: String
+    Description: Management VPC private route table 2.
   ManagementPublicRouteTable1:
     Type: String
+    Description: Management VPC public route table 1.
   ManagementPublicRouteTable2:
     Type: String
+    Description: Management VPC public route table 2.
   DevVPCCIDRBlock:
     Type: String
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
+    Description: Development VPC CIDR block.
   ProdVPCCIDRBlock:
     Type: String
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
+    Description: Production VPC CIDR block.
 Resources:
   HIPAATransitGateway:
     Type: 'AWS::EC2::TransitGateway'
@@ -192,7 +282,6 @@ Resources:
       DestinationCidrBlock: !Ref ProdVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPrivateSubnet1Route2:
     Type: 'AWS::EC2::Route'
@@ -201,7 +290,6 @@ Resources:
       DestinationCidrBlock: !Ref DevVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPrivateSubnet2Route1:
     Type: 'AWS::EC2::Route'
@@ -210,7 +298,6 @@ Resources:
       DestinationCidrBlock: !Ref ProdVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPrivateSubnet2Route2:
     Type: 'AWS::EC2::Route'
@@ -219,7 +306,6 @@ Resources:
       DestinationCidrBlock: !Ref DevVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPublicSubnet1Route1:
     Type: 'AWS::EC2::Route'
@@ -228,7 +314,6 @@ Resources:
       DestinationCidrBlock: !Ref ProdVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPublicSubnet1Route2:
     Type: 'AWS::EC2::Route'
@@ -237,7 +322,6 @@ Resources:
       DestinationCidrBlock: !Ref DevVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPublicSubnet2Route1:
     Type: 'AWS::EC2::Route'
@@ -246,7 +330,6 @@ Resources:
       DestinationCidrBlock: !Ref ProdVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   ManagementPublicSubnet2Route2:
     Type: 'AWS::EC2::Route'
@@ -255,7 +338,6 @@ Resources:
       DestinationCidrBlock: !Ref DevVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ManagementVPCtoTransitGateway
   DevelopmentVPCDefaultRoute:
     Type: 'AWS::EC2::Route'
@@ -265,7 +347,6 @@ Resources:
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
       - DevVPCtoTransitGateway
-      - HIPAATransitGateway
   ProductionVPCDefaultRoute:
     Type: 'AWS::EC2::Route'
     Properties:
@@ -273,7 +354,6 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - HIPAATransitGateway
       - ProductionVPCtoTransitGateway
 Outputs:
   Help:
