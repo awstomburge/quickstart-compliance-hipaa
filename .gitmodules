@@ -1,7 +1,3 @@
-[submodule "submodules/quickstart-compliance-common"]
-	path = submodules/quickstart-compliance-common
-	url = git@github.com:aws-quickstart/quickstart-compliance-common.git
-	branch = main
 [submodule "docs/boilerplate"]
 	path = docs/boilerplate
-	url = https://github.com/aws-quickstart/quickstart-documentation-base-common.git
+	url = https://github.com/aws-quickstart/quickstart-documentation-base-common/

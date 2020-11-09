@@ -1,7 +1,10 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Provisions HIPAA Ready Environment in AWS
+Description: Provisions HIPAA Ready Environment in AWS (qs-1qtukbnsl)
 Metadata:
+  LintSpellExclude:
+    - CloudWatch
+    - CloudTrail
   Identifier:
     Value: main
   Input:
@@ -11,11 +14,11 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: AWS Config Configuration
+        default: AWS config configuration
       Parameters:
       - AWSConfigARN
     - Label:
-        default: AWS Logging Configuration
+        default: AWS logging configuration
       Parameters:
       - SNSAlarmEmail
       - LifecycleExpirationDays
@@ -23,7 +26,7 @@ Metadata:
       - LifecycleTransitionGlacierDays
       - CloudTrailLogRetentionDays
     - Label:
-        default: Development VPC Configuration
+        default: Development VPC configuration
       Parameters:
       - DevVPCCIDRBlock
       - DevVPCSubnet1
@@ -31,7 +34,7 @@ Metadata:
       - DevVPCFlowLogLogGroup
       - DevVPCFlowLogLogGroupRetention
     - Label:
-        default: Production VPC Configuration
+        default: Production VPC configuration
       Parameters:
       - ProdVPCCIDRBlock
       - ProdVPCSubnet1
@@ -39,7 +42,7 @@ Metadata:
       - ProdVPCFlowLogLogGroup
       - ProdVPCFlowLogLogGroupRetention
     - Label:
-        default: Management VPC Configuration
+        default: Management VPC configuration
       Parameters:
       - MgmtVPCCIDRBlock
       - MgmtVPCPublicSubnet1
@@ -49,157 +52,157 @@ Metadata:
       - MgmtVPCFlowLogLogGroup
       - MgmtVPCFlowLogLogGroupRetention
     - Label:
-        default: AWS Quick Start Configuration
+        default: AWS quick start configuration
       Parameters:
       - QSS3BucketName
       - QSS3BucketRegion
       - QSS3KeyPrefix
     ParameterLabels:
       AWSConfigARN:
-        default: AWS Config Service Linked Role ARN
+        default: AWS config service linked role ARN
       SNSAlarmEmail:
-        default: CloudWatch Alarm Notification Email Address
+        default: CloudWatch alarm notification email address
       LifecycleExpirationDays:
-        default: S3 Lifecycle Expiration Days
+        default: S3 lifecycle expiration days
       LifecycleTransitionStandardIADays:
-        default: S3 Lifecycle Transition to Standard IA Days
+        default: S3 lifecycle transition to standard-IA days
       LifecycleTransitionGlacierDays:
-        default: S3 Lifecycle Transition to Glacier Days
+        default: S3 lifecycle transition to glacier days
       CloudTrailLogRetentionDays:
-        default: CloudTrail Retention Days
+        default: CloudTrail retention days
       DevVPCCIDRBlock:
-        default: Development VPC CIDR Block
+        default: Development VPC CIDR block
       DevVPCSubnet1:
-        default: Development Subnet 1 CIDR Block
+        default: Development Subnet 1 CIDR block
       DevVPCSubnet2:
-        default: Development Subnet 2 CIDR Block
+        default: Development Subnet 2 CIDR block
       DevVPCFlowLogLogGroup:
-        default: Development VPC Log Group
+        default: Development VPC log group
       DevVPCFlowLogLogGroupRetention:
-        default: Development VPC Log Group Retention Days
+        default: Development VPC log group retention days
       ProdVPCCIDRBlock:
-        default: Production VPC CIDR Block
+        default: Production VPC CIDR block
       ProdVPCSubnet1:
-        default: Production Subnet 1 CIDR Block
+        default: Production Subnet 1 CIDR block
       ProdVPCSubnet2:
-        default: Production Subnet 2 CIDR Block
+        default: Production Subnet 2 CIDR block
       ProdVPCFlowLogLogGroup:
-        default: Production VPC Log Group
+        default: Production VPC log group
       ProdVPCFlowLogLogGroupRetention:
-        default: Production VPC Log Group Retention Days
+        default: Production VPC log group retention days
       MgmtVPCCIDRBlock:
-        default: Management VPC CIDR Block
+        default: Management VPC CIDR block
       MgmtVPCPublicSubnet1:
-        default: Management Public Subnet 1 CIDR Block
+        default: Management public Subnet 1 CIDR block
       MgmtVPCPublicSubnet2:
-        default: Management Public Subnet 2 CIDR Block
+        default: Management public Subnet 2 CIDR block
       MgmtVPCPrivateSubnet1:
-        default: Management Private Subnet 1 CIDR Block
+        default: Management private Subnet 1 CIDR block
       MgmtVPCPrivateSubnet2:
-        default: Management Private Subnet 2 CIDR Block
+        default: Management private Subnet 2 CIDR block
       MgmtVPCFlowLogLogGroup:
-        default: Management VPC Log Group
+        default: Management VPC log group
       MgmtVPCFlowLogLogGroupRetention:
-        default: Management VPC Log Group Retention Days
+        default: Management VPC log group retention days
       QSS3BucketName:
-        default: Quick Start S3 Bucket Name
+        default: Quick Start S3 bucket name
       QSS3BucketRegion:
         default: Quick Start S3 bucket region
       QSS3KeyPrefix:
-        default: Quick Start S3 Key Prefix
+        default: Quick Start S3 key prefix
 Parameters:
   AWSConfigARN:
     Type: String
     Default: ''
-    Description: AWS Config Service Linked Role ARN
+    Description: AWS config service linked role ARN.
   LifecycleExpirationDays:
     Type: Number
     Default: 2555
-    Description: Lifecycle Expiration Days
+    Description: Lifecycle expiration days.
   LifecycleTransitionStandardIADays:
     Type: Number
     Default: 90
-    Description: Lifecycle Transition Standard-IA Days
+    Description: Lifecycle transition standard-IA days.
   LifecycleTransitionGlacierDays:
     Type: Number
     Default: 180
-    Description: Lifecycle Transition Glacier Days
+    Description: Lifecycle transition glacier days.
   SNSAlarmEmail:
     Type: String
     Default: ''
-    Description: SNS Security Alarm Email
+    Description: SNS security alarm email.
   CloudTrailLogRetentionDays:
     Type: Number
     Default: 90
-    Description: CloudTrail Log Group Retention Days
+    Description: CloudTrail log group retention days.
   DevVPCCIDRBlock:
     Type: String
     Default: 172.18.0.0/16
-    Description: Development VPC CIDR Block
+    Description: Development VPC CIDR block.
   DevVPCSubnet1:
     Type: String
     Default: 172.18.11.0/24
-    Description: Development VPC Subnet 1
+    Description: Development VPC Subnet 1.
   DevVPCSubnet2:
     Type: String
     Default: 172.18.12.0/24
-    Description: Development VPC Subnet 2
+    Description: Development VPC Subnet 2.
   DevVPCFlowLogLogGroup:
     Type: String
     Default: dev-flow-logs-group
-    Description: Development VPC Flow Logs Log Group
+    Description: Development VPC flow logs log group.
   DevVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
-    Description: Development VPC Flow Logs Log Group Retention Days
+    Description: Development VPC flow logs log group retention days.
   ProdVPCCIDRBlock:
     Type: String
     Default: 172.17.0.0/16
-    Description: Production VPC CIDR Block
+    Description: Production VPC CIDR block.
   ProdVPCSubnet1:
     Type: String
     Default: 172.17.11.0/24
-    Description: Production VPC Subnet 1
+    Description: Production VPC Subnet 1.
   ProdVPCSubnet2:
     Type: String
     Default: 172.17.12.0/24
-    Description: Production VPC Subnet 2
+    Description: Production VPC Subnet 2.
   ProdVPCFlowLogLogGroup:
     Type: String
     Default: prod-flow-logs-group
-    Description: Production VPC Flow Logs Log Group
+    Description: Production VPC flow logs log group.
   ProdVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
-    Description: Production VPC Flow Logs Log Group Retention Days
+    Description: Production VPC flow logs log group retention days.
   MgmtVPCCIDRBlock:
     Type: String
     Default: 172.16.0.0/16
-    Description: Management VPC CIDR Block
+    Description: Management VPC CIDR block.
   MgmtVPCPublicSubnet1:
     Type: String
     Default: 172.16.1.0/24
-    Description: Management VPC Subnet 1
+    Description: Management VPC public subnet 1.
   MgmtVPCPublicSubnet2:
     Type: String
     Default: 172.16.2.0/24
-    Description: Management VPC Subnet 2
+    Description: Management VPC public subnet 2.
   MgmtVPCPrivateSubnet1:
     Type: String
     Default: 172.16.11.0/24
-    Description: Management VPC Subnet 1
+    Description: Management VPC private subnet 1.
   MgmtVPCPrivateSubnet2:
     Type: String
     Default: 172.16.12.0/24
-    Description: Management VPC Subnet 2
+    Description: Management VPC private subnet 2.
   MgmtVPCFlowLogLogGroup:
     Type: String
     Default: mgmt-flow-logs-group
-    Description: Management VPC Flow Logs Log Group
+    Description: Management VPC flow logs log group.
   MgmtVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
-    Description: Management VPC Flow Logs Log Group Retention Days
+    Description: Management VPC flow logs log group retention days.
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
@@ -223,28 +226,6 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
     Type: String
-Mappings:
-  RegionServiceSupport:
-    us-east-1:
-      ConfigRules: 'true'
-      NatGateway: 'true'
-      Glacier: 'true'
-    us-east-2:
-      ConfigRules: 'true'
-      NatGateway: 'true'
-      Glacier: 'true'
-    us-gov-west-1:
-      ConfigRules: 'true'
-      NatGateway: 'true'
-      Glacier: 'true'
-    us-west-1:
-      ConfigRules: 'true'
-      NatGateway: 'true'
-      Glacier: 'true'
-    us-west-2:
-      ConfigRules: 'true'
-      NatGateway: 'true'
-      Glacier: 'true'
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:

@@ -1,7 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Provisions HIPAA Ready Environment in AWS
-Metadata:
+Description: Provisions HIPAA Ready Environment in AWS (qs-1rabh51jr)
   Identifier:
     Value: main
   Input:
@@ -11,24 +10,43 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Development VPC Configuration
+        default: Development VPC configuration
       Parameters:
       - DevVPCCIDRBlock
       - DevVPCSubnet1
       - DevVPCSubnet2
       - DevVPCFlowLogLogGroup
       - DevVPCFlowLogLogGroupRetention
+    ParameterLabels:
+      DevVPCCIDRBlock:
+        default: Development VPC CIDR block
+      DevVPCSubnet1:
+        default: Development Subnet 1 CIDR block
+      DevVPCSubnet2:
+        default: Development Subnet 2 CIDR block
+      DevVPCFlowLogLogGroup:
+        default: Development VPC log group
+      DevVPCFlowLogLogGroupRetention:
+        default: Development VPC log group retention days
 Parameters:
   DevVPCCIDRBlock:
     Type: String
+    Description: Development VPC CIDR block.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   DevVPCSubnet1:
     Type: String
+    Description: Development VPC private subnet 1.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   DevVPCSubnet2:
     Type: String
+    Description: Development VPC private subnet 2.
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
   DevVPCFlowLogLogGroup:
     Type: String
+    Description: Development VPC flow logs log group.
   DevVPCFlowLogLogGroupRetention:
     Type: String
+    Description: Development VPC flow logs log group retention days.
 Resources:
   DevelopmentVPCFlowLogGroup:
     Type: 'AWS::Logs::LogGroup'
