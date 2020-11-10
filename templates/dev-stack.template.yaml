@@ -108,7 +108,7 @@ Resources:
         - DevelopmentFlowLogsRole
         - Arn
       LogDestinationType: cloud-watch-logs
-      LogGroupName: !Ref DevVPCFlowLogLogGroup
+      LogGroupName: !Ref DevelopmentVPCFlowLogGroup
       Tags:
         - Key: Name
           Value: Development VPC Flow Logs

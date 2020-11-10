@@ -117,7 +117,7 @@ Resources:
         - ManagementFlowLogsRole
         - Arn
       LogDestinationType: cloud-watch-logs
-      LogGroupName: !Ref MgmtVPCFlowLogLogGroup
+      LogGroupName: !Ref ManagementVPCFlowLogGroup
       Tags:
         - Key: Name
           Value: Management VPC Flow Logs
