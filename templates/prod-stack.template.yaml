@@ -108,7 +108,7 @@ Resources:
         - ProductionFlowLogsRole
         - Arn
       LogDestinationType: cloud-watch-logs
-      LogGroupName: !Ref ProdVPCFlowLogLogGroup
+      LogGroupName: !Ref ProductionVPCFlowLogGroup
       Tags:
         - Key: Name
           Value: Production VPC Flow Logs
