@@ -148,3 +148,4 @@ no-commit
 no-commit/
 quickstart-compliance-hipaa-cdk/hchcns
 quickstart-compliance-hipaa-cdk/hchcns/
+build_docs.bat

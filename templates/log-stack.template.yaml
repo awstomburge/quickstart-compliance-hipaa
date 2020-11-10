@@ -319,7 +319,6 @@ Resources:
       EnableLogFileValidation: true
       IncludeGlobalServiceEvents: true
       SnsTopicName: !Ref SNSSecurityAlarmTopic
-      TrailName: cloudtrail-trail
     DependsOn:
       - AWSCloudTrailBucketPolicy
   MetricFilterCloudTrailChange:
