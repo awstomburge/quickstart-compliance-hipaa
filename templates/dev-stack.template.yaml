@@ -16,7 +16,7 @@ Metadata:
       - DevVPCCIDRBlock
       - DevVPCSubnet1
       - DevVPCSubnet2
-      - DevVPCFlowLogLogGroup
+      # - DevVPCFlowLogLogGroup
       - DevVPCFlowLogLogGroupRetention
     ParameterLabels:
       DevVPCCIDRBlock:
@@ -25,8 +25,8 @@ Metadata:
         default: Development Subnet 1 CIDR block
       DevVPCSubnet2:
         default: Development Subnet 2 CIDR block
-      DevVPCFlowLogLogGroup:
-        default: Development VPC log group
+      # DevVPCFlowLogLogGroup:
+      #   default: Development VPC log group
       DevVPCFlowLogLogGroupRetention:
         default: Development VPC log group retention days
 Parameters:
@@ -42,9 +42,9 @@ Parameters:
     Type: String
     Description: Development VPC private subnet 2.
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
-  DevVPCFlowLogLogGroup:
-    Type: String
-    Description: Development VPC flow logs log group.
+  # DevVPCFlowLogLogGroup:
+  #   Type: String
+  #   Description: Development VPC flow logs log group.
   DevVPCFlowLogLogGroupRetention:
     Type: String
     Description: Development VPC flow logs log group retention days.
@@ -52,7 +52,7 @@ Resources:
   DevelopmentVPCFlowLogGroup:
     Type: 'AWS::Logs::LogGroup'
     Properties:
-      LogGroupName: !Ref DevVPCFlowLogLogGroup
+      # LogGroupName: !Ref DevVPCFlowLogLogGroup
       RetentionInDays: !Ref DevVPCFlowLogLogGroupRetention
   DevelopmentFlowLogsRole:
     Type: 'AWS::IAM::Role'
