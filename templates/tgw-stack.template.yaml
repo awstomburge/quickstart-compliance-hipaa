@@ -14,22 +14,10 @@ Metadata:
         default: Development VPC configuration
       Parameters:
       - DevVPCCIDRBlock
-      # - DevVPCSubnet1
-      # - DevVPCSubnet2
     - Label:
         default: Production VPC configuration
       Parameters:
       - ProdVPCCIDRBlock
-      # - ProdVPCSubnet1
-      # - ProdVPCSubnet2
-    # - Label:
-    #     default: Management VPC configuration
-    #   Parameters:
-    #   - MgmtVPCCIDRBlock
-    #   - MgmtVPCPublicSubnet1
-    #   - MgmtVPCPublicSubnet2
-    #   - MgmtVPCPrivateSubnet1
-    #   - MgmtVPCPrivateSubnet2
     - Label:
         default: Imported parameters
       Parameters:
@@ -51,26 +39,8 @@ Metadata:
     ParameterLabels:
       DevVPCCIDRBlock:
         default: Development VPC CIDR block
-      # DevVPCSubnet1:
-      #   default: Development Subnet 1 CIDR block
-      # DevVPCSubnet2:
-      #   default: Development Subnet 2 CIDR block
       ProdVPCCIDRBlock:
         default: Production VPC CIDR block
-      # ProdVPCSubnet1:
-      #   default: Production Subnet 1 CIDR block
-      # ProdVPCSubnet2:
-      #   default: Production Subnet 2 CIDR block
-      # MgmtVPCCIDRBlock:
-      #   default: Management VPC CIDR block
-      # MgmtVPCPublicSubnet1:
-      #   default: Management public Subnet 1 CIDR block
-      # MgmtVPCPublicSubnet2:
-      #   default: Management public Subnet 2 CIDR block
-      # MgmtVPCPrivateSubnet1:
-      #   default: Management private Subnet 1 CIDR block
-      # MgmtVPCPrivateSubnet2:
-      #   default: Management private Subnet 2 CIDR block
       DevelopmentVPC:
         default: Development VPC
       DevelopmentVPCSubnet1:

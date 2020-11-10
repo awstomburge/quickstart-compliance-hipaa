@@ -2,6 +2,17 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-This guide provides instructions for deploying the {partner-product-short-name} Quick Start reference architecture on the AWS Cloud.
+NOTE: *IMPORTANT PLEASE READ: You must have an AWS Business Associate Addendum (BAA) in place, and follow its configuration requirements, before running protected health information (PHI) workloads on AWS.* You should not use your AWS account in connection with PHI until you have accepted the AWS BAA and configured your AWS account(s) as required by the AWS BAA. Under HIPAA regulations, covered entities and business associates are responsible for putting in place a business associate agreement between themselves and each of their business associates. You are solely responsible for determining whether you and your organization need a business associate agreement with AWS. *If you determine you need a business associate agreement with AWS, you can* https://aws.amazon.com/artifact/getting-started/#BAA_Agreements[accept the AWS BAA through a self-service portal in AWS Artifact]. It is your responsibility to obtain a BAA from AWS. For more information about the AWS BAA, please visit the https://aws.amazon.com/compliance/hipaa-compliance/[AWS HIPAA Compliance webpage].
 
-This Quick Start is for users who <target audience and usage scenario>
+NOTE: *This Quick Start does not address state-specific laws that may apply to you.* This Quick Start only addresses requirements set forth under HIPAA, a U.S. federal law. Many individual states have adopted rules that are different and in some cases, stricter than those that are federally mandated under HIPAA.
+
+NOTE: *This Quick Start will not, by itself, make you HIPAA-compliant.* The information contained in this Quick Start package is not exhaustive, and must be reviewed, evaluated, assessed, and approved by you in connection with your organization’s particular security features, tools, and configurations. The security controls reference document included with this Quick Start explains how this Quick Start can be used to help support your compliance with certain requirements under the HIPAA Privacy and Security Rules. *However, it is the sole responsibility of you and your organization to determine which HIPAA regulatory requirements are applicable to you, and to ensure that you comply with those applicable requirements.* Importantly, most of the requirements under HIPAA are not technical but administrative (that is, people- and process-oriented). Although the security controls reference that is included with this Quick Start lists and discusses both the technical and administrative requirements, this Quick Start cannot help you comply with the non-technical HIPAA requirements.
+
+IMPORTANT: *Does HIPAA Apply to your Organization?*
+Customers are solely responsible for determining whether HIPAA applies to them, and if so, for complying with their obligations under HIPAA, the AWS BAA, and all other applicable laws, rules, and regulations. AWS does not provide legal or compliance advice. Customers should consult with qualified legal counsel or consultants, as needed, to ensure that their use of AWS complies with HIPAA, the terms of the AWS BAA, and other applicable laws, rules, and regulations.
+
+This guide provides instructions for deploying the {partner-product-short-name} Quick Start reference architecture on the AWS Cloud. +
+
+This Quick Start is for users who in the healthcare industry that are looking for guidance on implementing HIPAA ready environments on the AWS Cloud.
+
+
