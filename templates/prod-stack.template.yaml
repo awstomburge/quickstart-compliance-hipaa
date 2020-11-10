@@ -16,7 +16,7 @@ Metadata:
       - ProdVPCCIDRBlock
       - ProdVPCSubnet1
       - ProdVPCSubnet2
-      - ProdVPCFlowLogLogGroup
+      # - ProdVPCFlowLogLogGroup
       - ProdVPCFlowLogLogGroupRetention
     ParameterLabels:
       ProdVPCCIDRBlock:
@@ -25,8 +25,8 @@ Metadata:
         default: Production Subnet 1 CIDR block
       ProdVPCSubnet2:
         default: Production Subnet 2 CIDR block
-      ProdVPCFlowLogLogGroup:
-        default: Production VPC log group
+      # ProdVPCFlowLogLogGroup:
+      #   default: Production VPC log group
       ProdVPCFlowLogLogGroupRetention:
         default: Production VPC log group retention days
 Parameters:
@@ -42,9 +42,9 @@ Parameters:
     Type: String
     Description: Production VPC private subnet 2.
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
-  ProdVPCFlowLogLogGroup:
-    Type: String
-    Description: Production VPC flow logs log group.
+  # ProdVPCFlowLogLogGroup:
+  #   Type: String
+  #   Description: Production VPC flow logs log group.
   ProdVPCFlowLogLogGroupRetention:
     Type: String
     Description: Production VPC flow logs log group retention days.
@@ -52,7 +52,7 @@ Resources:
   ProductionVPCFlowLogGroup:
     Type: 'AWS::Logs::LogGroup'
     Properties:
-      LogGroupName: !Ref ProdVPCFlowLogLogGroup
+      # LogGroupName: !Ref ProdVPCFlowLogLogGroup
       RetentionInDays: !Ref ProdVPCFlowLogLogGroupRetention
   ProductionFlowLogsRole:
     Type: 'AWS::IAM::Role'
