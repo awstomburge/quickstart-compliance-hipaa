@@ -31,7 +31,6 @@ Metadata:
       - DevVPCCIDRBlock
       - DevVPCSubnet1
       - DevVPCSubnet2
-      # - DevVPCFlowLogLogGroup
       - DevVPCFlowLogLogGroupRetention
     - Label:
         default: Production VPC configuration
@@ -39,7 +38,6 @@ Metadata:
       - ProdVPCCIDRBlock
       - ProdVPCSubnet1
       - ProdVPCSubnet2
-      # - ProdVPCFlowLogLogGroup
       - ProdVPCFlowLogLogGroupRetention
     - Label:
         default: Management VPC configuration
@@ -49,7 +47,6 @@ Metadata:
       - MgmtVPCPublicSubnet2
       - MgmtVPCPrivateSubnet1
       - MgmtVPCPrivateSubnet2
-      # - MgmtVPCFlowLogLogGroup
       - MgmtVPCFlowLogLogGroupRetention
     - Label:
         default: AWS quick start configuration
@@ -76,8 +73,6 @@ Metadata:
         default: Development Subnet 1 CIDR block
       DevVPCSubnet2:
         default: Development Subnet 2 CIDR block
-      # DevVPCFlowLogLogGroup:
-      #   default: Development VPC log group
       DevVPCFlowLogLogGroupRetention:
         default: Development VPC log group retention days
       ProdVPCCIDRBlock:
@@ -86,8 +81,6 @@ Metadata:
         default: Production Subnet 1 CIDR block
       ProdVPCSubnet2:
         default: Production Subnet 2 CIDR block
-      # ProdVPCFlowLogLogGroup:
-      #   default: Production VPC log group
       ProdVPCFlowLogLogGroupRetention:
         default: Production VPC log group retention days
       MgmtVPCCIDRBlock:
@@ -100,8 +93,6 @@ Metadata:
         default: Management private Subnet 1 CIDR block
       MgmtVPCPrivateSubnet2:
         default: Management private Subnet 2 CIDR block
-      # MgmtVPCFlowLogLogGroup:
-      #   default: Management VPC log group
       MgmtVPCFlowLogLogGroupRetention:
         default: Management VPC log group retention days
       QSS3BucketName:
@@ -147,10 +138,6 @@ Parameters:
     Type: String
     Default: 172.18.12.0/24
     Description: Development VPC Subnet 2.
-  # DevVPCFlowLogLogGroup:
-  #   Type: String
-  #   Default: dev-flow-logs-group
-  #   Description: Development VPC flow logs log group.
   DevVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
@@ -167,10 +154,6 @@ Parameters:
     Type: String
     Default: 172.17.12.0/24
     Description: Production VPC Subnet 2.
-  # ProdVPCFlowLogLogGroup:
-  #   Type: String
-  #   Default: prod-flow-logs-group
-  #   Description: Production VPC flow logs log group.
   ProdVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
@@ -195,10 +178,6 @@ Parameters:
     Type: String
     Default: 172.16.12.0/24
     Description: Management VPC private subnet 2.
-  # MgmtVPCFlowLogLogGroup:
-  #   Type: String
-  #   Default: mgmt-flow-logs-group
-  #   Description: Management VPC flow logs log group.
   MgmtVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
@@ -273,7 +252,6 @@ Resources:
         DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
         DevVPCSubnet1: !Ref DevVPCSubnet1
         DevVPCSubnet2: !Ref DevVPCSubnet2
-        # DevVPCFlowLogLogGroup: !Ref DevVPCFlowLogLogGroup
         DevVPCFlowLogLogGroupRetention: !Ref DevVPCFlowLogLogGroupRetention
   ProdStack:
     Type: 'AWS::CloudFormation::Stack'
@@ -289,7 +267,6 @@ Resources:
         ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
         ProdVPCSubnet1: !Ref ProdVPCSubnet1
         ProdVPCSubnet2: !Ref ProdVPCSubnet2
-        # ProdVPCFlowLogLogGroup: !Ref ProdVPCFlowLogLogGroup
         ProdVPCFlowLogLogGroupRetention: !Ref ProdVPCFlowLogLogGroupRetention
   MgmtStack:
     Type: 'AWS::CloudFormation::Stack'
@@ -307,7 +284,6 @@ Resources:
         MgmtVPCPublicSubnet2: !Ref MgmtVPCPublicSubnet2
         MgmtVPCPrivateSubnet1: !Ref MgmtVPCPrivateSubnet1
         MgmtVPCPrivateSubnet2: !Ref MgmtVPCPrivateSubnet2
-        # MgmtVPCFlowLogLogGroup: !Ref MgmtVPCFlowLogLogGroup
         MgmtVPCFlowLogLogGroupRetention: !Ref MgmtVPCFlowLogLogGroupRetention
   TgwStack:
     Type: 'AWS::CloudFormation::Stack'
